@@ -2,7 +2,7 @@ import _ from 'lodash'
 import browser from 'webextension-polyfill'
 
 const GOOGLE_ACCESS_TOKEN_KEY = 'at'
-const STORAGE_FOLDER_NAME = 'better-onetab-storage'
+const STORAGE_FOLDER_NAME = 'icetab-storage'
 const STORAGE_FOLDER_ID_KEY = 'sfid'
 
 const clearToken = () => {

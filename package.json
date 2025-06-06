@@ -1,10 +1,10 @@
 {
-  "name": "better-onetab",
+  "name": "IceTab",
   "version": "1.0.0",
-  "description": "a better OneTab for browsers",
+  "description": "like OneTab, except better + open-source",
   "main": "index.js",
-  "repository": "https://github.com/cnwangjie/better-onetab",
-  "author": "cnwangjie",
+  "repository": "https://github.com/elijahcommits/icetab",
+  "author": "cnwangjie / elijahcommits",
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack --config webpack.dev.js --watch",

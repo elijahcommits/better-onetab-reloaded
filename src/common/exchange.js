@@ -23,7 +23,7 @@ const exportToText = async compatible => {
 }
 
 const exportToFile = (text, {type, suffix}) => {
-  const name = 'BetterOnetab_backup_' + moment().format('L') + suffix
+  const name = 'IceTab_backup_' + moment().format('L') + suffix
   const blob = new Blob(['\ufeff' + text], {type})
   download(blob, name, type)
 }
