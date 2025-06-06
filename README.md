@@ -50,15 +50,23 @@ You can learn more about the next step of better onetab at [project page](https:
 
 Build your own from following steps：
 
-### Development / Installation
+### Development / Build From Source
 
 0. Clone this repo
-0. Install dependencies (use `yarn` command)
-0. Auto reload (use `yarn dev` command)
+0. Install dependencies (use `yarn install` command while in the root directory)
+0. Auto reload (for developers - use `yarn dev` command while in the root directory)
+0. Build (use `NODE_OPTIONS=--openssl-legacy-provider yarn build` command while in the root directory)
 0. Click LOAD UNPACKED button and select ./dist path
-0. Build (use `yarn build` command)
 
-### Especially thanks
+
+### Regular Install (for those who aren't raging nerds like myself)
+
+0. Download the ./dist folder from this repo.
+0. If it downloads as a .zip folder, extract that .zip. If you don't know how to extract a .zip file, please use your favorite search engine and learn how. It's a helpful skill to have.
+0. Drag the .crx file (inside your new folder) directly to your Chrome/Brave/etc. Extensions page. Hold on to your .pem file for future updates. In fact, back it up. I am not responsible for lost data.
+0. Please let me know if these instructions don't work for you.
+
+### Special thanks
 
 Thanks for [@Yasujizr](https://github.com/Yasujizr) helped this project design new logo and banners.
 
