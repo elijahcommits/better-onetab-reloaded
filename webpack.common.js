@@ -7,16 +7,24 @@ const { VueLoaderPlugin } = require('vue-loader')
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
 const path = require('path')
 
+// Determine if it's a development build based on NODE_ENV
+const isDevelopment = process.env.NODE_ENV === 'development';
+
 const config = {
   development: {
     __CLIENT_ID__: '530831729511-eq8apt6dhjimbmdli90jp2ple0lfmn3l.apps.googleusercontent.com',
-    __DEV_CSP__: process.env.MOZ ? '' : ' http://localhost:8098 chrome-extension://nhdogjmejiglipccpnnnanhbledajbpd',
-    __EXT_NAME__: 'better-onetab (dev)',
+    // Keep HTTP sources for scripts here
+    __DEV_CSP_SCRIPT__: process.env.MOZ ? '' : ' http://localhost:8098 chrome-extension://nhdogjmejiglipccpnnnanhbledajbpd',
+    // Add WebSocket sources here for connections
+    __DEV_CSP_CONNECT__: process.env.MOZ ? '' : ' ws://localhost:8098',
+    __EXT_NAME__: 'IceTab (dev)',
     __CONTENT_SCRIPTS_MATCHES__: process.env.MOZ ? '*://*/*' : 'http://127.0.0.1:3000/*',
   },
   production: {
     __CLIENT_ID__: '530831729511-dclgvblhv7var13mvpjochb5f295a6vc.apps.googleusercontent.com',
-    __DEV_CSP__: '',
+    // These should be empty in production
+    __DEV_CSP_SCRIPT__: '',
+    __DEV_CSP_CONNECT__: '',
     __EXT_NAME__: '__MSG_ext_name__',
     __CONTENT_SCRIPTS_MATCHES__: 'https://boss.cnwangjie.com/*',
   }
@@ -44,18 +52,18 @@ module.exports = {
       MOZ: moz,
     }),
     new CleanWebpackPlugin(['dist']),
-    new CopyWebpackPlugin([
+    new CopyWebpackPlugin([ // <--- Array around the patterns again!
       {
         from: 'src/manifest.json',
-        to: 'manifest.json',
-        transform(content, path) {
-          content = content.toString()
+        to: 'manifest.json', // 'to' is outside the transform object
+        transform(content, path) { // 'transform' is a direct function property
+          content = content.toString();
           if (mode in config) {
-            Object.entries(config[mode]).map(([key, value]) => {
-              content = content.replace(new RegExp(key, 'g'), value)
-            })
+            Object.entries(config[mode]).map(([key, value]) => { // You can keep map or change to forEach here
+              content = content.replace(new RegExp(key, 'g'), value);
+            });
           }
-          return content
+          return content;
         }
       },
       { from: 'src/assets/icons', to: 'assets/icons' },

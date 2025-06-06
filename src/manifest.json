@@ -68,7 +68,7 @@
     "webRequest",
     "webRequestBlocking"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com__DEV_CSP_SCRIPT__; object-src 'self'; connect-src 'self'__DEV_CSP_CONNECT__",
   "web_accessible_resources": [
     "*"
   ]
