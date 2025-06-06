@@ -423,11 +423,13 @@ export default {
       const list = this.lists[this.rightClickedListIndex]
       const selectedItems = []
       list.tabs.forEach((tab, tabIndex) => {
-        if (tab.selected) selectedItems.push({
+        if (tab.selected) {
+          selectedItems.push({
           // for avoid to change old functions
-          listIndex: this.rightClickedListIndex,
-          tabIndex,
-        })
+            listIndex: this.rightClickedListIndex,
+            tabIndex,
+          })
+        }
       })
       return selectedItems
     },
@@ -584,10 +586,10 @@ export default {
   position: absolute;
   display: inline-flex;
   width: 80%;
-  /deep/ .v-input__slot {
+  ::v-deep .v-input__slot {
     min-height: 32px !important;
   }
-  /deep/ input {
+  ::v-deep input {
     margin-top: 0 !important;
   }
 }

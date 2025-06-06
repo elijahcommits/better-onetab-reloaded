@@ -84,7 +84,8 @@ export default {
       const lists = await storage.getLists()
       this.lists = lists
       const opts = await storage.getOptions()
-      this.action = opts.popupItemClickAction
+      // **FIXED LINE**: Check if opts exists and provide a default value.
+      this.action = (opts && opts.popupItemClickAction) || 'restore'
       this.processed = true
     },
     clicked(index) {

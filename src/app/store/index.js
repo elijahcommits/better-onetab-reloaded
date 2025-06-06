@@ -29,6 +29,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setOption(state, payload) {
+      if (!payload) return // Prevent crash on undefined payload
       for (const [k, v] of Object.entries(payload)) {
         state.opts[k] = v
       }
@@ -56,7 +57,11 @@ export default new Vuex.Store({
   },
   actions: {
     async loadOptions({commit}) {
-      commit('setOption', await storage.getOptions())
+      const loadedOptions = await storage.getOptions()
+      // FIX: Only update the options if we successfully loaded something from storage.
+      if (loadedOptions) {
+        commit('setOption', loadedOptions)
+      }
     },
     async checkToken({commit}) {
       commit('setToken', await boss.hasToken())

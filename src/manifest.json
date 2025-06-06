@@ -1,10 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "__EXT_NAME__",
-  "version": "1.4.7",
+  "name": "__MSG_ext_name__",
+  "version": "1.15.5",
   "default_locale": "en",
   "description": "__MSG_ext_desc__",
-  "author": "WangJie <doudou19758@gmail.com>",
   "icons": {
     "16": "assets/icons/icon_16.png",
     "48": "assets/icons/icon_48.png",
@@ -13,63 +12,64 @@
   "background": {
     "scripts": [
       "background.js"
-    ]
+    ],
+    "persistent": true
   },
+  "browser_action": {
+    "default_title": "__MSG_ext_name__",
+    "default_icon": {
+      "16": "assets/icons/icon_16.png",
+      "48": "assets/icons/icon_48.png",
+      "128": "assets/icons/icon_128.png"
+    },
+    "default_popup": "index.html#/popup"
+  },
+  "options_page": "index.html#/app/options",
   "commands": {
     "store-selected-tabs": {
-      "description": "__MSG_cmd_store_selected_tabs__",
-      "global": true
+      "description": "__MSG_cmd_store_selected_tabs__"
     },
     "store-all-tabs": {
-      "description": "__MSG_cmd_store_all_tabs__",
-      "global": true
+      "description": "__MSG_cmd_store_all_tabs__"
     },
     "restore-lastest-list": {
-      "description": "__MSG_cmd_restore_lastest_list__",
-      "global": true
+      "description": "__MSG_cmd_restore_lastest_list__"
     },
     "open-lists": {
-      "description": "__MSG_cmd_open_lists__",
-      "global": true
+      "description": "__MSG_cmd_open_lists__"
     },
     "store-all-in-all-windows": {
-      "description": "__MSG_cmd_store_all_in_all_windows__",
-      "global": true
+      "description": "__MSG_cmd_store_all_in_all_windows__"
     }
   },
   "content_scripts": [
     {
-      "matches": ["__CONTENT_SCRIPTS_MATCHES__"],
-      "js": ["content.js"]
+      "matches": [
+        "https://www.google.com/search*",
+        "https://www.google.com.hk/search*",
+        "https://www.baidu.com/s*",
+        "https://www.bing.com/search*",
+        "https://duckduckgo.com/*",
+        "https://www.sogou.com/web*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
     }
   ],
-  "browser_action": {
-    "default_icon": {
-      "16": "assets/icons/icon_16.png",
-      "24": "assets/icons/icon_48.png",
-      "32": "assets/icons/icon_128.png"
-    }
-  },
   "permissions": [
+    "<all_urls>",
+    "commands",
     "contextMenus",
     "storage",
     "tabs",
-    "history",
-    "identity",
-    "notifications"
+    "webRequest",
+    "webRequestBlocking"
   ],
-  "homepage_url": "https://github.com/cnwangjie/better-onetab",
-  "oauth2": {
-    "client_id": "__CLIENT_ID__",
-    "scopes": [
-      "https://www.googleapis.com/auth/drive"
-    ]
-  },
-  "offline_enabled": true,
-  "options_page": "index.html#/app/options",
-  "options_ui": {
-    "page": "index.html#/app/options",
-    "open_in_tab": true
-  },
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com https://apis.google.com __DEV_CSP__; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'",
+  "web_accessible_resources": [
+    "*"
+  ]
 }

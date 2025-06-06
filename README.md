@@ -1,10 +1,10 @@
-> [!NOTE]
->
-> The [OneTab](https://chromewebstore.google.com/detail/onetab/chphlpgkkbolifaimnlloiipkdnihall) extension seems to have been sold. The new owner has registered a trademark for it and notified me by email about the removal from Chrome Web Store.
->
-> I myself have not maintained this project for a long time. Therefore, this project is archived.
-> Currently, Chrome's built-in tab management features are powerful enough that there is no need to use extensions to manage tabs anymore. And you can try new browser projects like [Arc](https://arc.net/).
+# Better OneTab **RELOADED**
 
+**(Based on the archived [Better OneTab](https://github.com/cnwangjie/better-onetab) by cnwangjie)**
+
+This project is a continuation and maintenance effort for the excellent [Better OneTab extension](https://github.com/cnwangjie/better-onetab) which has been archived by its original author, cnwangjie. My goal is to keep the project updated and address bugs, as I use the extension... extensively myself.
+
+---
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/36993664/44917039-f208ad80-ad3f-11e8-85e9-e29489f0ffb4.png">
@@ -46,15 +46,11 @@ You can learn more about the next step of better onetab at [project page](https:
 
 ### Installation
 
-Install from [Google Extension Store](https://chrome.google.com/webstore/detail/better-onetab/eookhngofldnbnidjlbkeecljkfpmfpg)
-
-Install from [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/better-onetab/) (not optimized)
-
-Download the released .crx file in [releases page](https://github.com/cnwangjie/better-onetab/releases) and drag it to chrome extensions page.
+~~~Download the released .crx file in [releases page](https://github.com/cnwangjie/better-onetab/releases) and drag it to chrome extensions page.~~~
 
 Build your own from following steps：
 
-### Development
+### Development / Installation
 
 0. Clone this repo
 0. Install dependencies (use `yarn` command)
@@ -75,3 +71,5 @@ Thanks for [@Yasujizr](https://github.com/Yasujizr) helped this project design n
 ### License
 
 MIT LICENSE
+
+---

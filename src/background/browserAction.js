@@ -10,9 +10,7 @@ const actions = {
   'store-all-in-all-windows': tabs.storeAllTabInAllWindows,
 }
 
-const getBrowserActionHandler = action => {
-  return actions[action] || new Function()
-}
+const getBrowserActionHandler = action => actions[action] || new Function()
 
 export const updateBrowserAction = async (action, tmp = false) => {
   if (!tmp) window.currentBrowserAction = action
