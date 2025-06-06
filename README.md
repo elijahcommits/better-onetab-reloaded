@@ -46,7 +46,7 @@ You can learn more about the next step of better onetab at [project page](https:
 
 ### Installation
 
-~~~Download the released .crx file in [releases page](https://github.com/cnwangjie/better-onetab/releases) and drag it to chrome extensions page.~~~
+~~Download the released .crx file in [releases page](https://github.com/cnwangjie/better-onetab/releases) and drag it to chrome extensions page.~~
 
 Build your own from following steps：
 
@@ -57,12 +57,6 @@ Build your own from following steps：
 0. Auto reload (use `yarn dev` command)
 0. Click LOAD UNPACKED button and select ./dist path
 0. Build (use `yarn build` command)
-
-### Donation
-
-It took me a lot of time to develop Better Onetab and need to pay for the sync server every month. If my work helps you, you can donate it in the following way.
-
- - [PayPal](https://paypal.me/wangjie0)
 
 ### Especially thanks
 
