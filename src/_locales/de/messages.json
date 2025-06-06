@@ -1,6 +1,6 @@
 {
    "cmd_open_lists": {
-     "message":"Öffne die Tab-Liste"
+     "message":"IceTab"
    },
    "cmd_restore_lastest_list": {
      "message":"Letzte Tabs wiederherstellen"
