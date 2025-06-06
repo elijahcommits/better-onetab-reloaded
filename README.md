@@ -1,4 +1,4 @@
-# Better OneTab **RELOADED**
+# IceTab: Better OneTab **RELOADED**
 
 **(Based on the archived [Better OneTab](https://github.com/cnwangjie/better-onetab) by cnwangjie)**
 
