@@ -11,7 +11,7 @@
             </v-list-tile-avatar>
 
             <v-list-tile-content>
-              <v-list-tile-title>Better-onetab</v-list-tile-title>
+              <v-list-tile-title>IceTab (better-onetab-reloaded)</v-list-tile-title>
               <v-list-tile-sub-title>
                 <span>Version: {{ version }}</span>
                 <strong v-if="!!update" :style="{ color: 'green' }">v{{ update }} Has Available!</strong>
@@ -29,7 +29,7 @@
         </v-list>
       </v-card>
       <v-subheader>Change Logs</v-subheader>
-      <v-btn flat block href="https://github.com/cnwangjie/better-onetab/blob/master/CHANGELOG.md">Click to view the whole change logs</v-btn>
+      <v-btn flat block href="https://github.com/elijahcommits/icetab/blob/master/CHANGELOG.md">Click to view changelogs</v-btn>
     </v-flex>
   </v-layout>
 </div>

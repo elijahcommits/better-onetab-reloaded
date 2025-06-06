@@ -68,7 +68,7 @@
         <v-icon small>open_in_new</v-icon>
       </v-list-tile-action>
     </v-list-tile>
-    <v-list-tile href="https://github.com/elijahcommits/better-onetab-reloaded/issues/new/choose">
+    <v-list-tile href="https://github.com/elijahcommits/icetab/issues/new/choose">
       <v-list-tile-action>
         <v-icon>feedback</v-icon>
       </v-list-tile-action>
@@ -84,7 +84,7 @@
         Gitter
       </v-list-tile-content>
     </v-list-tile> -->
-    <v-list-tile href="https://github.com/elijahcommits/better-onetab-reloaded">
+    <v-list-tile href="https://github.com/elijahcommits/icetab">
       <v-list-tile-action>
         <v-icon>fab fa-github</v-icon>
       </v-list-tile-action>
