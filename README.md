@@ -61,9 +61,8 @@ Build your own from following steps：
 
 ### Regular Install (for those who aren't raging nerds like myself)
 
-0. Download the ./dist folder from this repo.
-0. If it downloads as a .zip folder, extract that .zip. If you don't know how to extract a .zip file, please use your favorite search engine and learn how. It's a helpful skill to have.
-0. Drag the .crx file (inside your new folder) directly to your Chrome/Brave/etc. Extensions page. Hold on to your .pem file for future updates. In fact, back it up. I am not responsible for lost data.
+0. Download the dist.crx file from the ./crx folder.
+0. Drag the .crx file directly into your Extensions page (Settings > Extensions > Manage Extensions).
 0. Please let me know if these instructions don't work for you.
 
 ### Special thanks
