@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import Vuex from 'vuex'
-import browser from 'webextension-polyfill'
+// The unused 'browser' import has been removed.
 import storage from '@/common/storage'
 import options from '@/common/options'
 import boss from '@/common/service/boss'
@@ -16,11 +16,11 @@ listManager.init()
 export default new Vuex.Store({
   strict: DEBUG,
   state: {
-    opts: options.getDefaultOptions(),    // all options
-    hasToken: false,                      // whether token exists
-    drawer: false,                        // drawer status
-    nightmode: false,                     // nightmode status
-    snackbar: { status: false, msg: '' }, // snackbar status
+    opts: options.getDefaultOptions(),
+    hasToken: false,
+    drawer: true,
+    nightmode: false,
+    snackbar: { status: false, msg: '' },
     scrollY: 0,
     ...lists.state,
   },
@@ -29,9 +29,14 @@ export default new Vuex.Store({
   },
   mutations: {
     setOption(state, payload) {
-      if (!payload) return // Prevent crash on undefined payload
+      if (!payload) return
       for (const [k, v] of Object.entries(payload)) {
-        state.opts[k] = v
+        Vue.set(state.opts, k, v)
+      }
+      // FIXED: Use the 'in' operator to check for the property
+      // instead of comparing to 'undefined'.
+      if ('defaultNightMode' in payload) {
+        state.nightmode = payload.defaultNightMode
       }
     },
     setToken(state, payload) {
@@ -56,34 +61,32 @@ export default new Vuex.Store({
     ...lists.mutations,
   },
   actions: {
-    async loadOptions({commit}) {
+    async initializeState({commit}) {
       const loadedOptions = await storage.getOptions()
-      // FIX: Only update the options if we successfully loaded something from storage.
       if (loadedOptions) {
         commit('setOption', loadedOptions)
       }
+      const { drawer } = await storage.get('drawer')
+      commit('setDrawer', _.defaultTo(drawer, true))
+
+      commit('checkToken', await boss.hasToken())
     },
     async checkToken({commit}) {
       commit('setToken', await boss.hasToken())
     },
-    // Refactored actions to use message passing instead of getBackgroundPage()
-    async loadDrawer({commit}) {
-      const { drawer } = await browser.runtime.sendMessage({ type: 'getGlobalState', key: 'drawer' })
-      commit('setDrawer', _.defaultTo(drawer, true))
+    async setAndSaveOption({ commit, state }, { key, value }) {
+      const newOpts = { ...state.opts, [key]: value }
+      commit('setOption', newOpts)
+      await storage.setOptions(newOpts)
     },
     async switchDrawer({commit, state}) {
       const newDrawerState = !state.drawer
-      await browser.runtime.sendMessage({ type: 'setGlobalState', key: 'drawer', value: newDrawerState })
       commit('setDrawer', newDrawerState)
+      await storage.set({ drawer: newDrawerState })
     },
-    async loadNightmode({commit, state}) {
-      const { nightmode } = await browser.runtime.sendMessage({ type: 'getGlobalState', key: 'nightmode' })
-      commit('setNightmode', _.defaultTo(nightmode, state.opts.defaultNightMode))
-    },
-    async switchNightmode({commit, state}) {
+    async switchNightmode({ dispatch, state }) {
       const newNightmodeState = !state.nightmode
-      await browser.runtime.sendMessage({ type: 'setGlobalState', key: 'nightmode', value: newNightmodeState })
-      commit('setNightmode', newNightmodeState)
+      await dispatch('setAndSaveOption', { key: 'defaultNightMode', value: newNightmodeState })
     },
     async showSnackbar({commit}, message) {
       commit('setSnackbar', message)

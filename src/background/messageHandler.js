@@ -5,7 +5,6 @@ import {sendMessage} from '../common/utils'
 import listManager from '../common/listManager'
 import {setupContextMenus} from './contextMenus'
 import {updateBrowserAction} from './browserAction'
-import _ from 'lodash' // ADD THIS LINE TO IMPORT LODASH
 
 // Global state variables are now managed in init.js and accessed via messages.
 // These local variables in messageHandler.js are no longer needed
