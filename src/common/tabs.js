@@ -8,25 +8,33 @@ listManager.init()
 
 const getAllInWindow = windowId => browser.tabs.query({windowId})
 
+const APP_TAB_ID_KEY = 'appTabIds' // Define a key for storing app tab IDs in storage
+
 const openTabLists = async () => {
-  // open only one in a window
-  const window = await browser.runtime.getBackgroundPage()
-  if (!_.isObject(window.appTabId)) window.appTabId = {}
   const currentWindow = await browser.windows.getCurrent()
   const windowId = currentWindow.id
   const tabListsUrl = browser.runtime.getURL('index.html#/app/')
-  if (windowId in window.appTabId) {
+
+  // Retrieve stored appTabIds from local storage
+  const storedData = await browser.storage.local.get(APP_TAB_ID_KEY)
+  const appTabIds = storedData[APP_TAB_ID_KEY] || {}
+
+  if (windowId in appTabIds) {
     const tabs = await getAllInWindow(windowId)
-    const tab = tabs.find(tab => tab.id === window.appTabId[windowId])
-    if (tab) {
-      if (tab.url.startsWith(tabListsUrl)) {
-        return browser.tabs.update(tab.id, { active: true })
-      }
-      delete window.appTabId[windowId]
+    const tab = tabs.find(t => t.id === appTabIds[windowId])
+    if (tab && tab.url.startsWith(tabListsUrl)) {
+      // If the tab exists and is the correct URL, activate it
+      return browser.tabs.update(tab.id, { active: true })
     }
+    // If tab doesn't exist or URL is wrong, remove it from tracking
+    delete appTabIds[windowId]
+    await browser.storage.local.set({ [APP_TAB_ID_KEY]: appTabIds })
   }
-  const createdTab = await browser.tabs.create({url: tabListsUrl})
-  window.appTabId[windowId] = createdTab.id
+
+  // Create a new tab and store its ID
+  const createdTab = await browser.tabs.create({ url: tabListsUrl })
+  appTabIds[windowId] = createdTab.id
+  await browser.storage.local.set({ [APP_TAB_ID_KEY]: appTabIds })
 }
 
 const openAboutPage = () => {

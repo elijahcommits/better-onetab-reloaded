@@ -24,8 +24,7 @@ const app = new Vue({
   el: '#app',
   router,
   store,
-  template: '<App/>',
-  components: { App }
+  render: h => h(App) // signal to Vue that we don't need its in-browser compiler
 })
 
 if (DEBUG) {

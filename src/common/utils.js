@@ -42,10 +42,9 @@ export const genObjectId = () => {
   const timestamp = (new Date().getTime() / 1000 | 0).toString(16)
   return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => (Math.random() * 16 | 0).toString(16)).toLowerCase()
 }
-export const isBackground = async () => {
-  if (window._isBackground == null) window._isBackground = window === await browser.runtime.getBackgroundPage()
-  return window._isBackground
-}
+// Corrected to place expression on the same line as the arrow
+export const isBackground = () => typeof self.importScripts === 'function' //
+
 export const formatSize = bytes => {
   // refer: https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
   const sufixes = ['Bytes', 'KB', 'MB', 'GB']

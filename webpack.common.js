@@ -1,6 +1,10 @@
 /* eslint-disable */
 const webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+// Note: Your package.json lists clean-webpack-plugin ^0.1.19.
+// For newer versions (v3+), the syntax is `const { CleanWebpackPlugin } = require('clean-webpack-plugin');`
+// and `new CleanWebpackPlugin()`. If you update the plugin, you'll need to change this line and the plugin instantiation.
+// For now, keeping your existing `new CleanWebpackPlugin(['dist'])` as it matches your declared version.
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
@@ -9,33 +13,36 @@ const path = require('path')
 
 // Determine if it's a development build based on NODE_ENV
 const isDevelopment = process.env.NODE_ENV === 'development';
+const mode = process.env.NODE_ENV || 'development' // Ensure 'mode' is defined for minification logic
+const PRODUCTION = mode !== 'development'; // Define PRODUCTION for minification logic
 
+// --- START CHANGES: CSP Placeholders for Manifest V3 ---
+// For extension_pages, these should generally be empty strings,
+// as Chrome Manifest V3 does not allow external script or connect sources for these pages.
 const config = {
   development: {
     __CLIENT_ID__: '530831729511-eq8apt6dhjimbmdli90jp2ple0lfmn3l.apps.googleusercontent.com',
-    // Keep HTTP sources for scripts here
-    __DEV_CSP_SCRIPT__: process.env.MOZ ? '' : ' http://localhost:8098 chrome-extension://nhdogjmejiglipccpnnnanhbledajbpd',
-    // Add WebSocket sources here for connections
-    __DEV_CSP_CONNECT__: process.env.MOZ ? '' : ' ws://localhost:8098',
+    __DEV_CSP_SCRIPT__: '', // Changed to empty string for M3 compliance on extension_pages
+    __DEV_CSP_CONNECT__: '', // Changed to empty string for M3 compliance on extension_pages
     __EXT_NAME__: 'IceTab (dev)',
     __CONTENT_SCRIPTS_MATCHES__: process.env.MOZ ? '*://*/*' : 'http://127.0.0.1:3000/*',
   },
   production: {
     __CLIENT_ID__: '530831729511-dclgvblhv7var13mvpjochb5f295a6vc.apps.googleusercontent.com',
-    // These should be empty in production
-    __DEV_CSP_SCRIPT__: '',
-    __DEV_CSP_CONNECT__: '',
+    __DEV_CSP_SCRIPT__: '', // Already empty, good!
+    __DEV_CSP_CONNECT__: '', // Already empty, good!
     __EXT_NAME__: '__MSG_ext_name__',
     __CONTENT_SCRIPTS_MATCHES__: 'https://boss.cnwangjie.com/*',
   }
 }
+// --- END CHANGES: CSP Placeholders for Manifest V3 ---
 
 const resolve = (...paths) => path.join(__dirname, ...paths)
-const mode = process.env.NODE_ENV || 'development'
 const moz = process.env.MOZ
+
 module.exports = {
   entry: {
-    app: ['./src/app/index.js'],
+    app: ['./src/app/index.js'], // This is your main Vue app entry point
     background: ['./src/background/index.js'],
     content: './src/content.js',
     exchanger: './src/exchanger.js',
@@ -51,15 +58,15 @@ module.exports = {
       PRODUCTION: mode !== 'development',
       MOZ: moz,
     }),
-    new CleanWebpackPlugin(['dist']),
-    new CopyWebpackPlugin([ // <--- Array around the patterns again!
+    new CleanWebpackPlugin(['dist']), // Still using the older syntax as per your package.json version
+    new CopyWebpackPlugin([
       {
         from: 'src/manifest.json',
-        to: 'manifest.json', // 'to' is outside the transform object
-        transform(content, path) { // 'transform' is a direct function property
+        to: 'manifest.json',
+        transform(content, path) {
           content = content.toString();
           if (mode in config) {
-            Object.entries(config[mode]).map(([key, value]) => { // You can keep map or change to forEach here
+            Object.entries(config[mode]).map(([key, value]) => {
               content = content.replace(new RegExp(key, 'g'), value);
             });
           }
@@ -69,12 +76,50 @@ module.exports = {
       { from: 'src/assets/icons', to: 'assets/icons' },
       { from: 'src/_locales', to: '_locales' },
     ]),
+
+    // --- START CHANGES: Add HtmlWebpackPlugin for popup.html and options.html ---
+    // For your Popup page
+    new HtmlWebpackPlugin({
+      filename: 'popup.html', // Output filename in 'dist'
+      template: 'src/app/index.html', // Source HTML template
+      chunks: ['app'], // Include only the 'app' chunk (your main Vue app bundle)
+      inject: true, // Inject JS into the HTML
+      minify: PRODUCTION ? {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      } : false,
+    }),
+
+    // For your Options Page
+    new HtmlWebpackPlugin({
+      filename: 'options.html', // Output filename in 'dist'
+      template: 'src/app/index.html', // Source HTML template
+      chunks: ['app'], // Include only the 'app' chunk
+      inject: true, // Inject JS into the HTML
+      minify: PRODUCTION ? {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      } : false,
+    }),
+    // --- END CHANGES: Add HtmlWebpackPlugin for popup.html and options.html ---
+
+    // Your existing HtmlWebpackPlugin for index.html (if it's still needed, e.g., for a new tab page)
+    // If your popup and options are the *only* pages using the 'app' entry,
+    // you might consider removing this one to avoid an unused 'index.html' file.
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'src/app/index.html',
-      excludeChunks: ['background', 'content', 'exchanger'],
+      excludeChunks: ['background', 'content', 'exchanger'], // Ensure these entry points are NOT injected here
       inject: true,
+      minify: PRODUCTION ? {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      } : false,
     }),
+
     new VueLoaderPlugin(),
     new VuetifyLoaderPlugin(),
   ],
@@ -84,14 +129,18 @@ module.exports = {
   optimization: {
     splitChunks: {
       name: true,
-      minChunks: Infinity,
+      // You might want to adjust minChunks for better caching
+      // minChunks: Infinity, // This will create one large vendor chunk
+      // Consider `minChunks: 2` to share modules used in at least 2 entry points
     },
-    minimizer: [],
+    minimizer: [], // minimizers are typically configured in webpack.prod.js (as you have)
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      // --- START CHANGE: Point Vue to its runtime-only build ---
+      'vue$': 'vue/dist/vue.runtime.esm.js', // THIS IS CRUCIAL for Manifest V3 CSP
+      // --- END CHANGE: Point Vue to its runtime-only build ---
       '@': resolve('src'),
     }
   },
@@ -150,4 +199,3 @@ module.exports = {
     ]
   }
 }
-

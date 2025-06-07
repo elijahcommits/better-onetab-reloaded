@@ -13,7 +13,8 @@ const commandHandler = command => {
   const handler = commands[command]
   if (!handler) return
   handler()
-  if (PRODUCTION) ga('send', 'event', 'Command used', command)
+  // Removed Google Analytics call
+  // if (PRODUCTION) ga('send', 'event', 'Command used', command)
 }
 
 export default commandHandler

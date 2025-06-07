@@ -633,7 +633,7 @@ export default {
     .checkbox {
       margin-left: 20px;
       margin-top: 0;
-      padding-top: (40px - 24px) / 2;
+      padding-top: calc((40px - 24px) / 2);
     }
   }
 }

@@ -66,23 +66,24 @@ export default new Vuex.Store({
     async checkToken({commit}) {
       commit('setToken', await boss.hasToken())
     },
+    // Refactored actions to use message passing instead of getBackgroundPage()
     async loadDrawer({commit}) {
-      const window = await browser.runtime.getBackgroundPage()
-      window.drawer = _.defaultTo(window.drawer, true)
-      commit('setDrawer', window.drawer)
+      const { drawer } = await browser.runtime.sendMessage({ type: 'getGlobalState', key: 'drawer' })
+      commit('setDrawer', _.defaultTo(drawer, true))
     },
     async switchDrawer({commit, state}) {
-      const window = await browser.runtime.getBackgroundPage()
-      commit('setDrawer', window.drawer = !state.drawer)
+      const newDrawerState = !state.drawer
+      await browser.runtime.sendMessage({ type: 'setGlobalState', key: 'drawer', value: newDrawerState })
+      commit('setDrawer', newDrawerState)
     },
     async loadNightmode({commit, state}) {
-      const window = await browser.runtime.getBackgroundPage()
-      window.nightmode = _.defaultTo(window.nightmode, state.opts.defaultNightMode)
-      commit('setNightmode', window.nightmode)
+      const { nightmode } = await browser.runtime.sendMessage({ type: 'getGlobalState', key: 'nightmode' })
+      commit('setNightmode', _.defaultTo(nightmode, state.opts.defaultNightMode))
     },
     async switchNightmode({commit, state}) {
-      const window = await browser.runtime.getBackgroundPage()
-      commit('setNightmode', window.nightmode = !state.nightmode)
+      const newNightmodeState = !state.nightmode
+      await browser.runtime.sendMessage({ type: 'setGlobalState', key: 'nightmode', value: newNightmodeState })
+      commit('setNightmode', newNightmodeState)
     },
     async showSnackbar({commit}, message) {
       commit('setSnackbar', message)

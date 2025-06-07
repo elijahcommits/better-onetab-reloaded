@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_ext_name__",
   "version": "1.15.5",
   "default_locale": "en",
@@ -9,12 +9,9 @@
     "96": "assets/icons/favicon-96x96.png"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ],
-    "persistent": true
+    "service_worker": "background.js"
   },
-  "browser_action": {
+  "action": {
     "default_title": "__MSG_ext_name__",
     "default_icon": {
       "16": "assets/icons/favicon-16x16.ico",
@@ -58,16 +55,26 @@
     }
   ],
   "permissions": [
-    "<all_urls>",
     "commands",
     "contextMenus",
     "storage",
     "tabs",
-    "webRequest",
-    "webRequestBlocking"
+    "webRequest"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com__DEV_CSP_SCRIPT__; object-src 'self'; connect-src 'self'__DEV_CSP_CONNECT__",
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://*.google.com https://*.googleapis.com https://sentry.io ws://localhost:8098 http://127.0.0.1:3000 ws://127.0.0.1:3000;"
+  },
   "web_accessible_resources": [
-    "*"
+    {
+      "resources": [
+        "*"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
   ]
 }

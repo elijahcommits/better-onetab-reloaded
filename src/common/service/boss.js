@@ -70,9 +70,10 @@ const getInfo = () => fetchData('/api/info').then(info => {
   return info
 })
 
+// Use self instead of window for global state in service worker
 const setWSToken = token => {
-  if (!window._socket) return
-  window._socket.io.opts.query = {
+  if (!self._socket) return
+  self._socket.io.opts.query = {
     [AUTH_HEADER]: token,
   }
 }
@@ -84,7 +85,7 @@ const _socketEmitTimeout = (socket, event, arg) => timeout(new Promise((resolve,
 }), 5000)
 
 const uploadOpsViaWS = async () => {
-  const socket = window._socket
+  const socket = self._socket
   if (!socket || !socket.connected) throw new Error('socket not connected')
   const {ops} = await browser.storage.local.get('ops')
   if (ops) {
@@ -98,7 +99,7 @@ const uploadOpsViaWS = async () => {
 }
 
 const downloadRemoteLists = async () => {
-  const socket = window._socket
+  const socket = self._socket
   if (!socket || !socket.connected) throw new Error('socket not connected')
   const remoteTime = await _socketEmitTimeout(socket, 'list.time')
   const {listsUpdatedAt: localTime} = await browser.storage.local.get('listsUpdatedAt')
@@ -139,11 +140,11 @@ const syncLists = async () => {
   }
 }
 
-const getRemoteOptionsUpdatedTimeViaWS = () => _socketEmitTimeout(window._socket, 'opts.time')
+const getRemoteOptionsUpdatedTimeViaWS = () => _socketEmitTimeout(self._socket, 'opts.time')
 
-const getRemoteOptions = () => _socketEmitTimeout(window._socket, 'opts.all')
+const getRemoteOptions = () => _socketEmitTimeout(self._socket, 'opts.all')
 
-const setRemoteOptions = (opts, time) => _socketEmitTimeout(window._socket, 'opts.set', { opts, time })
+const setRemoteOptions = (opts, time) => _socketEmitTimeout(self._socket, 'opts.set', { opts, time })
 
 const syncOptions = async () => {
   const remoteTime = await getRemoteOptionsUpdatedTimeViaWS()
@@ -162,15 +163,15 @@ const syncOptions = async () => {
  * date: 2019-01-21
  *
  * options:
- *  - record the time when options are changed
- *  - get remote options updated time
- *  - if local time is later than remote upload local options to remote and set remote time, else if local time is before than remote download the remote options and set local time
+ * - record the time when options are changed
+ * - get remote options updated time
+ * - if local time is later than remote upload local options to remote and set remote time, else if local time is before than remote download the remote options and set local time
  *
  * lists:
- *  - record each time of list be updated (UPDATE_LIST_BY_ID)
- *  - upload local operations to remote (include the time and save in server storage)
- *  - compare the latest updated time of each list
- *  - if local time is before than remote download that remote list
+ * - record each time of list be updated (UPDATE_LIST_BY_ID)
+ * - upload local operations to remote (include the time and save in server storage)
+ * - compare the latest updated time of each list
+ * - if local time is before than remote download that remote list
  *
  */
 let _refreshing = false
@@ -208,14 +209,18 @@ const login = async token => {
   await refresh()
 }
 
+// _syncTimer is declared here
+let _syncTimer
+
 const initTimer = async () => {
-  if (window._syncTimer || !(await isBackground())) return
+  // Use self instead of window for global state in service worker
+  if (_syncTimer || !(await isBackground())) return
 
   const _nextTimer = time => {
-    window._syncTimer = setTimeout(async () => {
+    _syncTimer = setTimeout(async () => {
       if (await hasToken()) {
         getInfo() // for update token
-        if (window._socket && window._socket.connected) {
+        if (self._socket && self._socket.connected) {
           refresh()
           return _nextTimer(time)
         }
@@ -224,36 +229,46 @@ const initTimer = async () => {
     }, time)
   }
 
-  const _refreshTimer = time => {
-    clearTimeout(window._syncTimer)
-    _nextTimer(time)
-  }
+  // Removed _refreshTimer as it was unused after event listeners were commented out
+  // const _refreshTimer = time => {
+  //   clearTimeout(_syncTimer)
+  //   _nextTimer(time)
+  // }
 
-  window.addEventListener('offline', () => _refreshTimer(SYNC_MAX_INTERVAL))
-  window.addEventListener('online', () => _refreshTimer(SYNC_MIN_INTERVAL))
+  // Event listeners for offline/online are not directly available in Service Workers like this.
+  // Service Workers have fetch events, but not direct window.addEventListener('offline').
+  // This part might need a different approach if network status is critical.
+  // For now, commenting out to avoid errors.
+  // window.addEventListener('offline', () => _refreshTimer(SYNC_MAX_INTERVAL))
+  // window.addEventListener('online', () => _refreshTimer(SYNC_MIN_INTERVAL))
+
   browser.runtime.onMessage.addListener(({login, refreshed}) => {
-    if (login || refreshed && refreshed.success) window._nextSyncInterval = SYNC_MIN_INTERVAL
+    if (login || refreshed && refreshed.success) self._nextSyncInterval = SYNC_MIN_INTERVAL
   })
   _nextTimer(SYNC_MIN_INTERVAL)
 }
 
+// _socket is declared here
+let _socket
+
 const init = async () => {
-  if (window._socket || !await isBackground()) return
-  const socket = window._socket = io(SYNC_SERVICE_URL, {path: '/ws', autoConnect: false})
+  // Use self instead of window for global state in service worker
+  if (_socket || !await isBackground()) return
+  _socket = io(SYNC_SERVICE_URL, {path: '/ws', autoConnect: false}) // Assign to _socket
   setWSToken(await getToken())
   await listManager.init()
-  socket.on('list.update', ({method, args}) => {
+  _socket.on('list.update', ({method, args}) => {
     listManager[method](...args)
   })
-  socket.on('opts.set', async ({changes, time}) => {
+  _socket.on('opts.set', async ({changes, time}) => {
     const {opts} = await browser.storage.local.get('opts')
     for (const [k, v] of Object.entries(changes)) {
       opts[k] = v
     }
     await browser.storage.local.set({opts, optsUpdatedAt: time})
   })
-  socket.on('connect', () => refresh())
-  socket.open()
+  _socket.on('connect', () => refresh())
+  _socket.open()
   initTimer()
 }
 

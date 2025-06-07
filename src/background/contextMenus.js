@@ -47,7 +47,9 @@ export const dynamicDisableMenu = async lists => {
   browser.contextMenus.update('STORE_SELECTED_TABS', {
     title: __('menu_STORE_SELECTED_TABS') + ` (${groupedTabs.inter.length})`,
   })
+
   lists = lists || await storage.getLists()
+
   for (let i = 0; i < lists.length; i += 1) {
     if (!lists[i].title) continue
     browser.contextMenus.update('STORE_TO_TITLED_LIST.STORE_LEFT_TABS|' + i, {
@@ -72,8 +74,10 @@ export const dynamicDisableMenu = async lists => {
 }
 
 const createMenus = async (obj, parent, contexts, lists) => {
+  const opts = await storage.getOptions()
+
   if (obj === menus.STORE_TO_TITLED_LIST) {
-    if (window.opts.disableDynamicMenu) return
+    if (opts.disableDynamicMenu) return
     for (let listIndex = 0; listIndex < lists.length; listIndex += 1) {
       if (!lists[listIndex].title) continue
       const prop = {
@@ -113,25 +117,29 @@ const createMenus = async (obj, parent, contexts, lists) => {
   }
 }
 
+export const handleContextMenuClicked = info => {
+  console.log('context menu clicked', info.menuItemId)
+  if (info.menuItemId.startsWith('STORE_TO_TITLED_LIST')) {
+    const [key, listIndex] = info.menuItemId.split('|')
+    _.get(menus, key)(+listIndex)
+    // Removed Google Analytics call
+    // if (PRODUCTION) ga('send', 'event', 'Menu clicked', key)
+  } else {
+    _.get(menus, info.menuItemId)()
+    // Removed Google Analytics call
+    // if (PRODUCTION) ga('send', 'event', 'Menu clicked', info.menuItemId)
+  }
+}
+
 export const setupContextMenus = async ({pageContext, allContext}) => {
   await browser.contextMenus.removeAll()
-  const contexts = [browser.contextMenus.ContextType.BROWSER_ACTION]
+  const contexts = [browser.contextMenus.ContextType.ACTION] // Changed to ACTION for Manifest V3
   if (pageContext) {
     contexts.push(browser.contextMenus.ContextType.PAGE)
     if (allContext) contexts.push(browser.contextMenus.ContextType.ALL)
   }
   const lists = await storage.getLists()
-  window.contextMenusClickedHandler = info => {
-    console.log('context menu clicked', info.menuItemId)
-    if (info.menuItemId.startsWith('STORE_TO_TITLED_LIST')) {
-      const [key, listIndex] = info.menuItemId.split('|')
-      _.get(menus, key)(+listIndex)
-      if (PRODUCTION) ga('send', 'event', 'Menu clicked', key)
-    } else {
-      _.get(menus, info.menuItemId)()
-      if (PRODUCTION) ga('send', 'event', 'Menu clicked', info.menuItemId)
-    }
-  }
+
   console.groupCollapsed('create context menu', contexts)
   await createMenus(menus, null, contexts, lists)
   console.groupEnd('create context menu')

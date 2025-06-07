@@ -4,16 +4,19 @@ import browser from 'webextension-polyfill'
 import options from './options'
 
 const get = key => browser.storage.local.get(key)
+  .then(result => (result && typeof result[key] !== 'undefined') ? result[key] : null)
 
 const set = obj => browser.storage.local.set(obj)
 
-const getLists = () => get('lists')
-  .then(({lists}) => lists || [])
+const getLists = () => get('lists').then(lists => lists || [])
+
+const getOptions = () => get('opts')
 
 const setLists = async lists => {
   if (!Array.isArray(lists)) throw new TypeError(lists)
+  const loadedOpts = await getOptions()
+  const opts = loadedOpts || options.getDefaultOptions()
   const handledLists = lists.filter(i => Array.isArray(i.tabs)).map(normalizeList)
-  const {opts} = await get('opts')
   if (opts && opts.removeDuplicate) {
     handledLists.forEach(list => {
       list.tabs = _.unionBy(list.tabs, tab => tab.url)
@@ -21,9 +24,6 @@ const setLists = async lists => {
   }
   return set({lists: handledLists})
 }
-
-const getOptions = () => get('opts')
-  .then(({opts}) => opts)
 
 const setOptions = opts => set({
   opts: _.pick(opts, _.keys(options.getDefaultOptions())),
@@ -35,4 +35,6 @@ export default {
   setLists,
   getOptions,
   setOptions,
+  get,
+  set,
 }

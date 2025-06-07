@@ -1,47 +1,46 @@
 <template>
-<v-app :style="{width: '360px'}" :dark="nightmode">
-  <v-list dense v-if="lists.length > 0">
-    <template v-for="(list, index) in lists">
-      <v-list-tile
-        ripple
-        @click="clicked(index)"
-        :key="index"
-        :color="list.color"
-        class="list-item"
-      >
-        <v-list-tile-content>
-          <v-list-tile-title><strong>[{{ list.tabs.length }}]</strong> {{ friendlyTitle(list) }}</v-list-tile-title>
-          <v-list-tile-sub-title>{{ formatTime(list.time) }}</v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action>
-          <div class="text-xs-right">
-            <v-btn small class="list-item-btn-hover" flat icon title="store select tab into this list" @click.stop="storeInto(index)">
-              <v-icon :style="{fontSize: '14px'}">add</v-icon>
-            </v-btn>
-            <v-icon v-show="list.pinned" class="list-item-icon" color="blue" :style="{fontSize: '14px'}">fas fa-thumbtack</v-icon>
-          </div>
-        </v-list-tile-action>
-      </v-list-tile>
-      <v-divider v-if="index + 1 < lists.length"></v-divider>
-    </template>
-  </v-list>
+  <v-app :style="{width: '360px'}" :dark="nightmode">
+    <v-list dense v-if="lists.length > 0">
+      <template v-for="(list, index) in lists" :key="list._id">
+        <v-list-tile
+          ripple
+          @click="clicked(index)"
+          :color="list.color"
+          class="list-item"
+        >
+          <v-list-tile-content>
+            <v-list-tile-title><strong>[{{ list.tabs.length }}]</strong> {{ friendlyTitle(list) }}</v-list-tile-title>
+            <v-list-tile-sub-title>{{ formatTime(list.time) }}</v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <div class="text-xs-right">
+              <v-btn small class="list-item-btn-hover" flat icon title="store select tab into this list" @click.stop="storeInto(index)">
+                <v-icon :style="{fontSize: '14px'}">add</v-icon>
+              </v-btn>
+              <v-icon v-show="list.pinned" class="list-item-icon" color="blue" :style="{fontSize: '14px'}">fas fa-thumbtack</v-icon>
+            </div>
+          </v-list-tile-action>
+        </v-list-tile>
+        <v-divider v-if="index + 1 < lists.length"></v-divider>
+      </template>
+    </v-list>
 
-  <v-layout
-    :style="{minHeight: '100px'}"
-    v-if="!processed" align-center justify-center column fill-height>
-    <v-progress-circular
-      indeterminate
-      color="primary"
-    ></v-progress-circular>
-  </v-layout>
+    <v-layout
+      :style="{minHeight: '100px'}"
+      v-if="!processed" align-center justify-center column fill-height>
+      <v-progress-circular
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+    </v-layout>
 
-  <v-layout
-    :style="{minHeight: '100px'}"
-    v-if="processed && lists.length === 0" align-center justify-center column fill-height
-  >
-    <h3 class="display-2 grey--text" v-text="__('ui_no_list')"></h3>
-  </v-layout>
-</v-app>
+    <v-layout
+      :style="{minHeight: '100px'}"
+      v-if="processed && lists.length === 0" align-center justify-center column fill-height
+    >
+      <h3 class="display-2 grey--text" v-text="__('ui_no_list')"></h3>
+    </v-layout>
+  </v-app>
 </template>
 <script>
 import __ from '@/common/i18n'
@@ -75,16 +74,18 @@ export default {
       title = ': ' + title.slice(0, -2).substr(0, maxLen - 3) + '...'
       return title
     },
-    async switchNightMode() {
-      const window = await browser.runtime.getBackgroundPage()
-      if ('nightmode' in window) this.nightmode = window.nightmode || false
-    },
     async init() {
-      this.switchNightMode()
+      // Get nightmode state from the service worker using a message
+      const { nightmode } = await browser.runtime.sendMessage({
+        type: 'getGlobalState',
+        key: 'nightmode'
+      })
+      this.nightmode = nightmode || false
+
+      // The rest of the initialization
       const lists = await storage.getLists()
       this.lists = lists
       const opts = await storage.getOptions()
-      // **FIXED LINE**: Check if opts exists and provide a default value.
       this.action = (opts && opts.popupItemClickAction) || 'restore'
       this.processed = true
     },
