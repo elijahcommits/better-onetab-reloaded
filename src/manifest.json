@@ -5,8 +5,10 @@
   "default_locale": "en",
   "description": "__MSG_ext_desc__",
   "icons": {
-    "16": "assets/icons/favicon-16x16.ico",
-    "96": "assets/icons/favicon-96x96.png"
+    "16": "assets/icons/icon16.png",
+    "32": "assets/icons/icon32.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
   },
   "background": {
     "service_worker": "background.js"
@@ -14,8 +16,9 @@
   "action": {
     "default_title": "__MSG_ext_name__",
     "default_icon": {
-      "16": "assets/icons/favicon-16x16.ico",
-      "96": "assets/icons/favicon-96x96.png"
+      "16": "assets/icons/icon16.png",
+      "32": "assets/icons/icon32.png",
+      "48": "assets/icons/icon48.png"
     },
     "default_popup": "index.html#/popup"
   },
