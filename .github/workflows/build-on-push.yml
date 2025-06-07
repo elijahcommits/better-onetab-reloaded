@@ -1,0 +1,55 @@
+name: Build Extension on Push
+
+# This workflow will run on any push to the 'main' branch
+# but only if files in the 'src/' directory have changed.
+on:
+  push:
+    branches:
+      - main  # Or 'master' if that's your default branch
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'yarn.lock'
+
+jobs:
+  build-and-package:
+    # Use the latest stable version of Ubuntu to run the job
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out your repository's code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up a Node.js environment.
+      # Using Node.js v18, which is a stable long-term support (LTS) version.
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      # Step 3: Install all project dependencies from yarn.lock
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # Step 4: Run the build script defined in your package.json
+      # NOTE: Your README mentions using a special flag for older dependencies.
+      # If the build fails, you may need to use the command from your README:
+      # NODE_OPTIONS=--openssl-legacy-provider yarn build
+      - name: Build extension
+        run: yarn build
+
+      # Step 5: Create a zip file from the 'dist' directory
+      # This command is based on the 'package' script in your package.json
+      - name: Package extension
+        run: |
+          cd dist
+          zip -r ../dist.zip . -x "*.map"
+
+      # Step 6: Upload the 'dist.zip' file as a workflow artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: icetab-package
+          path: dist.zip
