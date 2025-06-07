@@ -441,6 +441,6 @@
      "message":"Syncronisationsfehler"
    },
    "ui_use_boss": {
-     "message":"Benutze Better-OneTab Sync-Service (unbegrenzter Speicherplatz)"
+     "message":"Benutze IceTab Sync-Service (unbegrenzter Speicherplatz)"
    }
 }

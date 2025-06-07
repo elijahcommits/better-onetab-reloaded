@@ -324,7 +324,7 @@
     "message": "Better Onetab 同步服务器 (不限制保存容量)"
   },
   "ui_use_boss": {
-    "message": "使用 Better Onetab 同步服务 (无限容量)"
+    "message": "使用 IceTab 同步服务 (无限容量)"
   },
   "ui_logged_uid": {
     "message": "已授权 UID: "

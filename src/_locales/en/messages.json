@@ -321,10 +321,10 @@
     "message": "Authorize with Github account"
   },
   "ui_boss": {
-    "message": "Better-Onetab Sync Server (unlimited storage)"
+    "message": "IceTab Sync Server (unlimited storage)"
   },
   "ui_use_boss": {
-    "message": "Use Better-Onetab Sync Service (unlimited storage)"
+    "message": "Use IceTab Sync Service (unlimited storage)"
   },
   "ui_logged_uid": {
     "message": "Has authorized with uid:"
@@ -432,7 +432,7 @@
     "message": "untitled"
   },
   "ui_updated_to_ver": {
-    "message": "Better Onetab has updated to"
+    "message": "IceTab has updated to"
   },
   "ui_click_view_changelog": {
     "message": "click to view detail changelog"
