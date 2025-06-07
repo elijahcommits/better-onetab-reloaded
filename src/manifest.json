@@ -5,9 +5,8 @@
   "default_locale": "en",
   "description": "__MSG_ext_desc__",
   "icons": {
-    "16": "assets/icons/icon_16.png",
-    "48": "assets/icons/icon_48.png",
-    "128": "assets/icons/icon_128.png"
+    "16": "assets/icons/favicon-16x16.ico",
+    "96": "assets/icons/favicon-96x96.png"
   },
   "background": {
     "scripts": [
@@ -18,9 +17,8 @@
   "browser_action": {
     "default_title": "__MSG_ext_name__",
     "default_icon": {
-      "16": "assets/icons/icon_16.png",
-      "48": "assets/icons/icon_48.png",
-      "128": "assets/icons/icon_128.png"
+      "16": "assets/icons/favicon-16x16.ico",
+      "96": "assets/icons/favicon-96x96.png"
     },
     "default_popup": "index.html#/popup"
   },
