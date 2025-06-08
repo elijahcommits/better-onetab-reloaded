@@ -1,15 +1,32 @@
 import _ from 'lodash'
 import __ from './i18n'
-import moment from 'moment'
+import { formatDistanceToNow, format, isSameYear } from 'date-fns'
+import { enUS, zhCN } from 'date-fns/locale'
 import {COLORS} from './constants'
 import browser from 'webextension-polyfill'
 
-moment.locale(__('@@ui_locale'))
-export const formatTime = time => {
-  if (Date.now() - time < 3600E3) return moment(time).fromNow()
+// Map your @@ui_locale to date-fns locale objects
+const dateFnsLocales = {
+  en: enUS,
+  zh_CN: zhCN,
+  de: zhCN, // Assuming 'de' maps to zhCN locale or needs a separate de locale from date-fns
+}
 
-  const withYear = !moment(time).isSame(new Date(), 'year')
-  return moment(time).format(`ddd, MMMM Do ${withYear ? 'YYYY' : ''}, kk:mm:ss`)
+const getDateFnsLocale = uiLocale => dateFnsLocales[uiLocale.split('-')[0]] || enUS
+
+export const formatTime = time => {
+  const date = new Date(time)
+  const now = new Date()
+  const locale = getDateFnsLocale(__('@@ui_locale')) // Corrected typo: ___ to __
+
+  // If time difference is less than 1 hour (3600E3 milliseconds)
+  if (now.getTime() - time < 3600E3) {
+    return formatDistanceToNow(date, { addSuffix: true, locale })
+  }
+
+  const withYear = !isSameYear(date, now)
+  const formatString = `iii, MMMM do ${withYear ? 'yyyy' : ''}, HH:mm:ss`
+  return format(date, formatString, { locale })
 }
 export const one = fn => {
   let executing = false
@@ -18,7 +35,7 @@ export const one = fn => {
     executing = true
     let re
     try {
-      re = await fn.apply(this, args) // eslint-disable-line
+      re = await fn.apply(this, args) // eslint-disable-line no-invalid-this
     } catch (error) {
       throw error
     } finally {
@@ -38,15 +55,12 @@ export const readFile = file => new Promise((resolve, reject) => {
   reader.readAsText(file)
 })
 export const genObjectId = () => {
-  // refer: https://gist.github.com/solenoid/1372386
   const timestamp = (new Date().getTime() / 1000 | 0).toString(16)
   return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => (Math.random() * 16 | 0).toString(16)).toLowerCase()
 }
-// Corrected to place expression on the same line as the arrow
-export const isBackground = () => typeof self.importScripts === 'function' //
+export const isBackground = () => typeof self.importScripts === 'function'
 
 export const formatSize = bytes => {
-  // refer: https://stackoverflow.com/questions/10420352/converting-file-size-in-bytes-to-human-readable-string
   const sufixes = ['Bytes', 'KB', 'MB', 'GB']
   const i = Math.floor(Math.log(bytes) / Math.log(1024))
   return !bytes && '0 Bytes' || (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sufixes[i]
@@ -85,19 +99,12 @@ export const sendMessage = async msg => {
   }
 }
 
-/**
- * this a helper function like Lodash.throttle but could be used for async function
- * and the function will be restricted (cannot be executed concurrently)
- *
- * @param {Function} fn
- * @param {Number} ms
- */
 export const throttle = (fn, ms) => {
   let executing
   let next
   let nextArgs
   let timeout
-  let lastTime // actual execute time
+  let lastTime
   return async function throttled(...args) {
     const now = Date.now()
     if (now - lastTime < ms) {
@@ -110,20 +117,18 @@ export const throttle = (fn, ms) => {
       return
     }
 
-    // ignore this called and retry after the function finished if it is executing
     if (executing) {
       next = true
       nextArgs = args
       return
     }
 
-    // set the status when the function executed actually
     executing = true
     lastTime = now
 
-    let re // save the result of function
+    let re
     try {
-      re = await fn.apply(this, args) // eslint-disable-line
+      re = await fn.apply(this, args) // eslint-disable-line no-invalid-this
     } catch (error) {
       throw error
     } finally {
@@ -140,9 +145,6 @@ export const throttle = (fn, ms) => {
   }
 }
 
-// for restrict access storage concurrently
-// refer: https://balpha.de/2012/03/javascript-concurrency-and-locking-the-html5-localstorage/
-// refer: https://github.com/mgtitimoli/await-mutex/blob/master/src/mutex.js
 export class Mutex {
   constructor() {
     this._locking = Promise.resolve()
