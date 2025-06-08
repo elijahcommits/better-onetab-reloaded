@@ -113,7 +113,7 @@
             :indeterminate="list.tabs.some(tab => tab.selected) && list.tabs.some(tab => !tab.selected)"
           ></v-checkbox>
         </v-flex>
-        <v-flex>
+        <v-flex class="text-xs-right">
           <v-btn
             :ref="'multi-op-' + list.index"
             flat small v-on:click="multiOpBtnClicked(list.index, $event)"
@@ -124,9 +124,9 @@
           <v-btn flat small v-on:click="openChangeTitle(list.index)">{{ __('ui_retitle_list') }}</v-btn>
           <v-btn flat small v-on:click="restoreList([list.index])">{{ __('ui_restore_all') }}</v-btn>
           <v-btn flat small v-on:click="restoreList([list.index, true])">{{ __('ui_restore_all_in_new_window') }}</v-btn>
-          <v-btn flat small color="error" v-on:click="removeList(list.index)" :disabled="list.pinned">{{ __('ui_remove_list') }}</v-btn>
           <v-btn flat small v-on:click="pinList([list.index, !list.pinned])">{{ list.pinned ? __('ui_unpin') : __('ui_pin') }} {{ __('ui_list') }}</v-btn>
           <v-btn flat small v-on:click="editTag(list.index, $event)" :ref="'edit-tag-' + list.index">EDIT TAG</v-btn>
+          <v-btn flat small color="error" v-on:click="removeList(list.index)" :disabled="list.pinned">{{ __('ui_remove_list') }}</v-btn>
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
