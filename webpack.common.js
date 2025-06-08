@@ -13,9 +13,6 @@ const isDevelopment = process.env.NODE_ENV === 'development';
 const mode = process.env.NODE_ENV || 'development' // Ensure 'mode' is defined for minification logic
 const PRODUCTION = mode !== 'development'; // Define PRODUCTION for minification logic
 
-// --- START CHANGES: CSP Placeholders for Manifest V3 ---
-// For extension_pages, these should generally be empty strings,
-// as Chrome Manifest V3 does not allow external script or connect sources for these pages.
 const config = {
   development: {
     __CLIENT_ID__: '530831729511-eq8apt6dhjimbmdli90jp2ple0lfmn3l.apps.googleusercontent.com',
@@ -32,7 +29,6 @@ const config = {
     __CONTENT_SCRIPTS_MATCHES__: 'https://boss.cnwangjie.com/*',
   }
 }
-// --- END CHANGES: CSP Placeholders for Manifest V3 ---
 
 const resolve = (...paths) => path.join(__dirname, ...paths)
 const moz = process.env.MOZ
@@ -177,17 +173,32 @@ module.exports = {
           'stylus-loader'
         ]
       },
+      // --- START CHANGES: Updated Asset Module Rules ---
       {
+        // Rule for fonts (woff2, eot, ttf, otf, svg)
         test: /\.(woff2?|eot|ttf|otf|svg)(\?.*)?$/,
-        loader: 'file-loader',
-        options: {
-          useRelativePath: true,
+        type: 'asset/resource', // Emits a separate file like file-loader
+        generator: {
+          // This ensures assets are placed in 'dist/assets/webfonts/' (or similar)
+          // and referenced correctly. Adjust path if your CSS expects them elsewhere.
+          filename: 'assets/webfonts/[name][ext]',
         },
       },
       {
-        test: /\.png$/,
-        use: 'url-loader?mimetype=image/png'
+        // Rule for images (png, jpeg, gif, webp, etc.)
+        test: /\.(png|jpe?g|gif|webp)$/i,
+        type: 'asset', // Automatically chooses between resource (separate file) and inline (data URI)
+        parser: {
+          dataUrlCondition: {
+            maxSize: 8 * 1024, // Assets smaller than 8KB will be inlined (like url-loader)
+          },
+        },
+        generator: {
+          // This ensures images are placed in 'dist/assets/img/' (or similar)
+          filename: 'assets/img/[name][ext]',
+        },
       },
+      // --- END CHANGES: Updated Asset Module Rules ---
       {
         test: /\.md$/,
         use: [
