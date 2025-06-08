@@ -1,3 +1,4 @@
+// src/app/router/index.js
 import Vue from 'vue'
 import Router from 'vue-router'
 const Popup = () => import(/* webpackChunkName: "popup" */ '@/app/page/Popup')
@@ -11,7 +12,8 @@ const DetailList = () => import(/* webpackChunkName: "main" */ '@/app/page/main/
 
 Vue.use(Router)
 
-const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup'
+// Remove this unused variable:
+// const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup'
 
 const router = new Router({
   routes: [
