@@ -199,7 +199,7 @@
 //   const loginNotificationId = 'login'
 //   browser.notifications.create(loginNotificationId, {
 //     type: 'basic',
-//     iconUrl: 'assets/icons/icon_128.png',
+//     iconUrl: 'assets/icons/icon128.png',
 //     title: 'you have login to boss successfully',
 //     message: '',
 //   })

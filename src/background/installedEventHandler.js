@@ -12,7 +12,7 @@ const installedEventHandler = detail => {
     })
     browser.notifications.create(updatedNotificationId, {
       type: 'basic',
-      iconUrl: 'assets/icons/icon_128.png',
+      iconUrl: 'assets/icons/icon128.png',
       title: __('ui_updated_to_ver') + ' v' + browser.runtime.getManifest().version,
       message: __('ui_click_view_changelog'),
     })

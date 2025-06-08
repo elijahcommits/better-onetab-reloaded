@@ -7,7 +7,7 @@
 
           <v-list-tile avatar>
             <v-list-tile-avatar tile>
-              <img src="~@/assets/icons/icon_128.png">
+              <img src="~@/assets/icons/icon128.png">
             </v-list-tile-avatar>
 
             <v-list-tile-content>
