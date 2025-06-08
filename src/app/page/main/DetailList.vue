@@ -1,5 +1,5 @@
 <template>
-<div>
+<v-layout column>
 
 <div class="text-xs-center" v-if="pageLength > 1">
   <v-pagination
@@ -259,7 +259,7 @@
   </v-combobox>
 </v-menu>
 
-</div>
+</v-layout>
 </template>
 <script>
 import draggable from 'vuedraggable'
