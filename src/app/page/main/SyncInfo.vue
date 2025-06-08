@@ -1,5 +1,5 @@
 <template>
-<div>
+<!-- <div>
   <v-layout>
     <v-flex xs12 sm6 offset-sm3>
       <v-card>
@@ -44,10 +44,11 @@
       </v-card>
     </v-flex>
   </v-layout>
-</div>
+</div> -->
 </template>
 
 <script>
+/*
 import __ from '@/common/i18n'
 import {SYNC_SERVICE_URL} from '@/common/constants'
 import {formatTime} from '@/common/utils'
@@ -95,4 +96,5 @@ export default {
     }
   }
 }
+*/
 </script>

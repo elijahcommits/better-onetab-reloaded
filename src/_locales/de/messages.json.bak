@@ -170,44 +170,50 @@
    "opt_name_removeItemBtnPos": {
      "message":"Die Position der Schaltfläche zum Entfernen von Elementen"
    },
+   "opt_name_syncList": {
+     "message":"Syncronisierte Listen"
+   },
+   "opt_name_syncOptions": {
+     "message":"Synchronisierungseinstellungen"
+   },
    "opt_name_titleFontSize": {
      "message":"Schriftgröße des Listentitels"
    },
-   "ui_nightmode": {
-     "message":"Nacht-Modus"
+   "opt_name_useBoss": {
+     "message":"Verwenden Sie einen besseren OneTab Sync-Server (unbegrenzter Speicherplatz)"
    },
-   "ui_tab": {
-     "message":"Tabs"
+   "ui_a_new_list": {
+     "message":"(eine neue Liste)"
    },
-   "ui_created": {
-     "message":"angelegt"
+   "ui_about": {
+     "message":"Über"
    },
-   "ui_retitle_list": {
-     "message":"Liste umbenennen"
+   "ui_auth": {
+     "message":"Zulassen"
    },
-   "ui_restore_all": {
-     "message":"Liste wiederherstellen"
+   "ui_auth_with_github": {
+     "message":"Zulassen mit Github Account"
    },
-   "ui_restore_all_in_new_window": {
-     "message":"Alle in neuem Fenster wiederherstellen"
+   "ui_auth_with_google": {
+     "message":"Zulassen mit Google Account"
    },
-   "ui_remove_list": {
-     "message":"Liste entfernen"
+   "ui_beta_warn": {
+     "message":"Dieses Merkmal wird momentan getestet. Wenn Sie ein Problem finden, senden Sie mir bitte ein Feedback."
    },
-   "ui_pin": {
-     "message":"Pin"
+   "ui_boss": {
+     "message":"Better-OneTab Sync-Server (unbegrenzter Speicherplatz)"
    },
-   "ui_unpin": {
-     "message":"Abpinnen"
+   "ui_click_view_changelog": {
+     "message":"Klicken Sie hier, um das Änderungsprotokoll anzuzeigen"
    },
-   "ui_list": {
-     "message":"Liste"
+   "ui_conflict": {
+     "message":"Konflikt"
    },
-   "ui_pinned": {
-     "message":"Angepinnt"
+   "ui_copied": {
+     "message":"Kopiert!"
    },
-   "ui_duplicate": {
-     "message":"Duplizieren"
+   "ui_copy": {
+     "message":"Kopieren"
    },
    "ui_copy_link": {
      "message":"Link kopieren"
@@ -215,14 +221,98 @@
    "ui_copy_title": {
      "message":"Titel kopieren"
    },
-   "ui_remove": {
-     "message":"Entfernen"
+   "ui_create_issue": {
+     "message":"Ein Problem erstellen"
+   },
+   "ui_created": {
+     "message":"angelegt"
+   },
+   "ui_deauth": {
+     "message":"Zulassen aufheben"
+   },
+   "ui_duplicate": {
+     "message":"Duplizieren"
+   },
+   "ui_export": {
+     "message":"Exportieren"
+   },
+   "ui_export_comp": {
+     "message":"Export (OneTab kompatibel)"
+   },
+   "ui_export_import": {
+     "message":"Export / Import"
+   },
+   "ui_export_json": {
+     "message":"Export im JSON Format"
+   },
+   "ui_github": {
+     "message":"Github"
+   },
+   "ui_import": {
+     "message":"Import"
+   },
+   "ui_import_comp": {
+     "message":"Import (OneTab kompatibel)"
+   },
+   "ui_import_from_file": {
+     "message":"Import von Datei"
+   },
+   "ui_import_json": {
+     "message":"Import von JSON Datei"
+   },
+   "ui_keyboard_shortcuts": {
+     "message":"Tastenkombinationen"
+   },
+   "ui_list": {
+     "message":"Liste"
+   },
+   "ui_logged_uid": {
+     "message":"Hat sich autorisiert mit uid:"
+   },
+   "ui_login": {
+     "message":"Login"
+   },
+   "ui_main_error_occurred": {
+     "message":"Einige Fehler sind aufgetreten"
+   },
+   "ui_main_processing": {
+     "message":"Verarbeitung....."
+   },
+   "ui_main_succeeded": {
+     "message":"erfolgreich!"
+   },
+   "ui_manage_account": {
+     "message":"Konto verwalten"
+   },
+   "ui_move_to": {
+     "message":"Verschieben nach"
+   },
+   "ui_new_warn": {
+     "message":"Dies ist ein neues Merkmal in der aktuellen Version."
+   },
+   "ui_nightmode": {
+     "message":"Nacht-Modus"
+   },
+   "ui_no_list": {
+     "message":"Keine Liste hier"
+   },
+   "ui_no_list_tip": {
+     "message":"1. Wählen Sie die Registerkarten aus, die Sie speichern möchten\u003C/br>2. Klicken Sie mit der rechten Maustaste auf das Erweiterungssymbol\u003C/br>3. Klicken Sie auf \"ausgewählte Registerkarten speichern\"\u003Cp class=\"body-2\">Bereits in anderen Geräten verwendet?  Die Autorisierung mit dem Synchronisierungsdienst kann die Listen automatisch wiederherstellen.\u003C/p>"
+   },
+   "ui_not_login": {
+     "message":"Nicht eingeloggt"
+   },
+   "ui_not_sync": {
+     "message":"Noch nicht synchronisiert"
+   },
+   "ui_offline": {
+     "message":"Sie sind offline"
    },
    "ui_open": {
      "message":"Öffnen"
    },
-   "ui_create_issue": {
-     "message":"Ein Problem erstellen"
+   "ui_opt_changes_saved": {
+     "message":"Änderungen gespeichert!"
    },
    "ui_options": {
      "message":"Optionen"
@@ -239,62 +329,89 @@
    "ui_options_sync": {
      "message":"Syncronisierung"
    },
-   "ui_about": {
-     "message":"Über"
+   "ui_opts_diff": {
+     "message":"Optionsunterschiede"
    },
-   "ui_keyboard_shortcuts": {
-     "message":"Tastenkombinationen"
+   "ui_pin": {
+     "message":"Pin"
    },
-   "ui_export_import": {
-     "message":"Export / Import"
+   "ui_pinned": {
+     "message":"Angepinnt"
    },
-   "ui_github": {
-     "message":"Github"
+   "ui_refresh": {
+     "message":"Aktualisieren"
    },
-   "ui_tab_list": {
-     "message":"Tab-Listen"
+   "ui_remove": {
+     "message":"Entfernen"
    },
-   "ui_export": {
-     "message":"Exportieren"
+   "ui_remove_list": {
+     "message":"Liste entfernen"
    },
-   "ui_import": {
-     "message":"Import"
+   "ui_restore_all": {
+     "message":"Liste wiederherstellen"
    },
-   "ui_export_comp": {
-     "message":"Export (OneTab kompatibel)"
+   "ui_restore_all_in_new_window": {
+     "message":"Alle in neuem Fenster wiederherstellen"
    },
-   "ui_export_json": {
-     "message":"Export im JSON Format"
+   "ui_retitle_list": {
+     "message":"Liste umbenennen"
    },
    "ui_save_as_file": {
      "message":"Als Datei speichern"
    },
-   "ui_copy": {
-     "message":"Kopieren"
+   "ui_save_immediately": {
+     "message":"Sofort speichern"
    },
-   "ui_copied": {
-     "message":"Kopiert!"
+   "ui_save_to_gdrive": {
+     "message":"Liste auf Google-Drive speichern"
    },
-   "ui_import_from_file": {
-     "message":"Import von Datei"
+   "ui_sync_authed_with": {
+     "message":"Hat sich autorisiert mit:"
    },
-   "ui_import_comp": {
-     "message":"Import (OneTab kompatibel)"
+   "ui_sync_exists_conflict_header": {
+     "message":"Es gibt einen Konflikt bei der Synchronisation mit dem Server."
    },
-   "ui_import_json": {
-     "message":"Import von JSON Datei"
+   "ui_sync_keep_both": {
+     "message":"Beide behalten"
    },
-   "ui_main_processing": {
-     "message":"Verarbeitung....."
+   "ui_sync_keep_local": {
+     "message":"Lokale behalten"
    },
-   "ui_main_error_occurred": {
-     "message":"Einige Fehler sind aufgetreten"
+   "ui_sync_keep_remote": {
+     "message":"Remote behalten"
    },
-   "ui_main_succeeded": {
-     "message":"erfolgreich!"
+   "ui_sync_lists_failed": {
+     "message":"Die Synchronisierung der Tab-Listen ist fehlgeschlagen."
    },
-   "ui_opt_changes_saved": {
-     "message":"Änderungen gespeichert!"
+   "ui_sync_lists_item": {
+     "message":"Listenelemente Remote"
+   },
+   "ui_sync_local_time": {
+     "message":"Aktualisierungszeit Lokal"
+   },
+   "ui_sync_opts_failed": {
+     "message":"Syncronisationsoptionen fehlgeschlagen"
+   },
+   "ui_sync_remote_time": {
+     "message":"Aktualisierungszeit Remote"
+   },
+   "ui_sync_setting": {
+     "message":"Syncronisationseinstellungen"
+   },
+   "ui_sync_use_local": {
+     "message":"Benutze Lokale"
+   },
+   "ui_sync_use_remote": {
+     "message":"Benutze Remote"
+   },
+   "ui_syncing": {
+     "message":"Syncronisiere"
+   },
+   "ui_tab": {
+     "message":"Tabs"
+   },
+   "ui_tab_list": {
+     "message":"Tab-Listen"
    },
    "ui_title_down_btn": {
      "message":"Liste nach unten verschieben"
@@ -305,17 +422,14 @@
    "ui_title_up_btn": {
      "message":"Liste nach oben verschieben"
    },
-   "ui_save_to_gdrive": {
-     "message":"Liste auf Google-Drive speichern"
+   "ui_turn_off": {
+     "message":"Ausschalten"
    },
-   "ui_save_immediately": {
-     "message":"Sofort speichern"
+   "ui_unauth": {
+     "message":"Nicht zugelassen"
    },
-   "ui_no_list": {
-     "message":"Keine Liste hier"
-   },
-   "ui_no_list_tip": {
-     "message":"1. Wählen Sie die Registerkarten aus, die Sie speichern möchten\u003C/br>2. Klicken Sie mit der rechten Maustaste auf das Erweiterungssymbol\u003C/br>3. Klicken Sie auf \"ausgewählte Registerkarten speichern\"\u003Cp class=\"body-2\">Bereits in anderen Geräten verwendet?  Die Autorisierung mit dem Synchronisierungsdienst kann die Listen automatisch wiederherstellen.\u003C/p>"
+   "ui_unpin": {
+     "message":"Abpinnen"
    },
    "ui_untitled": {
      "message":"Unbenannt"
@@ -323,13 +437,10 @@
    "ui_updated_to_ver": {
      "message":"IceTab wurde aktualisiert zu"
    },
-   "ui_click_view_changelog": {
-     "message":"Klicken Sie hier, um das Änderungsprotokoll anzuzeigen"
+   "ui_upload_error": {
+     "message":"Syncronisationsfehler"
    },
-   "ui_move_to": {
-     "message":"Verschieben nach"
-   },
-   "ui_a_new_list": {
-     "message":"(eine neue Liste)"
+   "ui_use_boss": {
+     "message":"Benutze IceTab Sync-Service (unbegrenzter Speicherplatz)"
    }
 }

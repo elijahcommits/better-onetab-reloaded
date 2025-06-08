@@ -95,6 +95,15 @@
   "opt_desc_openTabListWhenNewTab": {
     "message": "当前页面为新标签页的时候点击图标时显示标签页列表 (不会覆盖弹出简易列表的行为)"
   },
+  "opt_name_syncOptions": {
+    "message": "同步设置"
+  },
+  "opt_name_syncList": {
+    "message": "同步列表"
+  },
+  "opt_name_useBoss": {
+    "message": "使用better onetab同步服务（不限制保存空间）"
+  },
   "opt_name_alertRemoveList": {
     "message": "删除列表时确认"
   },
@@ -304,6 +313,102 @@
   },
   "ui_title_down_btn": {
     "message": "下移列表"
+  },
+  "ui_auth_with_google": {
+    "message": "通过 Google 账号授权"
+  },
+  "ui_auth_with_github": {
+    "message": "通过 Github 账号授权"
+  },
+  "ui_boss": {
+    "message": "Better Onetab 同步服务器 (不限制保存容量)"
+  },
+  "ui_use_boss": {
+    "message": "使用 IceTab 同步服务 (无限容量)"
+  },
+  "ui_logged_uid": {
+    "message": "已授权 UID: "
+  },
+  "ui_sync_exists_conflict_header": {
+    "message": "同步时发生冲突。"
+  },
+  "ui_sync_lists_failed": {
+    "message": "同步列表失败"
+  },
+  "ui_sync_opts_failed": {
+    "message": "同步设置失败"
+  },
+  "ui_sync_remote_time": {
+    "message": "远程更新时间"
+  },
+  "ui_sync_local_time": {
+    "message": "本地更新时间"
+  },
+  "ui_sync_lists_item": {
+    "message": "远程列表"
+  },
+  "ui_opts_diff": {
+    "message": "远程设置"
+  },
+  "ui_sync_keep_local": {
+    "message": "保留本地"
+  },
+  "ui_sync_keep_remote": {
+    "message": "保留远程"
+  },
+  "ui_sync_keep_both": {
+    "message": "同时保留"
+  },
+  "ui_sync_use_local": {
+    "message": "使用本地"
+  },
+  "ui_sync_use_remote": {
+    "message": "使用远程"
+  },
+  "ui_syncing": {
+    "message": "同步中"
+  },
+  "ui_conflict": {
+    "message": "冲突"
+  },
+  "ui_upload_error": {
+    "message": "同步错误"
+  },
+  "ui_not_sync": {
+    "message": "未同步"
+  },
+  "ui_deauth": {
+    "message": "取消授权"
+  },
+  "ui_auth": {
+    "message": "授权"
+  },
+  "ui_sync_authed_with": {
+    "message": "授权账户："
+  },
+  "ui_not_login": {
+    "message": "未登录"
+  },
+  "ui_unauth": {
+    "message": "未授权"
+  },
+  "ui_beta_warn": {
+    "message": "这是一个测试中的功能，如果遇到了任何问题请向我反馈。"
+  },
+  "ui_new_warn": {
+    "message": "这是当前版本的新特性。"
+  },
+  "ui_turn_off": {
+    "message": "停用"
+  },
+  "ui_sync_setting": {
+    "message": "同步设置"
+  },
+  "ui_manage_account": {
+    "message": "管理账户"
+  },
+  "ui_login": {
+    "message": "登录"
   },
   "ui_save_to_gdrive": {
     "message": "将列表保存至 Google Drive"

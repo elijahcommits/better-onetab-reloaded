@@ -1,10 +1,9 @@
 import _ from 'lodash'
 import Vue from 'vue'
 import Vuex from 'vuex'
-// The unused 'browser' import has been removed.
 import storage from '@/common/storage'
-import options from '@/common/options'
-import boss from '@/common/service/boss'
+import options from '@/common/options' // eslint-disable-line no-unused-vars
+// import boss from '@/common/service/boss' // Comment out this import
 import listManager from '@/common/listManager'
 import {sleep} from '@/common/utils'
 
@@ -16,7 +15,7 @@ listManager.init()
 export default new Vuex.Store({
   strict: DEBUG,
   state: {
-    opts: options.getDefaultOptions(),
+    opts: options.getDefaultOptions(), // 'options' is used here
     hasToken: false,
     drawer: true,
     nightmode: false,
@@ -33,8 +32,6 @@ export default new Vuex.Store({
       for (const [k, v] of Object.entries(payload)) {
         Vue.set(state.opts, k, v)
       }
-      // FIXED: Use the 'in' operator to check for the property
-      // instead of comparing to 'undefined'.
       if ('defaultNightMode' in payload) {
         state.nightmode = payload.defaultNightMode
       }
@@ -69,10 +66,11 @@ export default new Vuex.Store({
       const { drawer } = await storage.get('drawer')
       commit('setDrawer', _.defaultTo(drawer, true))
 
-      commit('checkToken', await boss.hasToken())
+      // commit('checkToken', await boss.hasToken())
     },
-    async checkToken({commit}) {
-      commit('setToken', await boss.hasToken())
+    checkToken({commit}) { // Removed 'async' keyword
+      // commit('setToken', await boss.hasToken())
+      commit('setToken', false)
     },
     async setAndSaveOption({ commit, state }, { key, value }) {
       const newOpts = { ...state.opts, [key]: value }

@@ -192,6 +192,18 @@ export const optionsList = [
     default: false,
     new: '1.3.6',
   },
+  // START - Comment out Boss sync options
+  /*
+  {
+    cate: cate.BEHAVIOUR,
+    name: 'useBoss',
+    type: Boolean,
+    default: false,
+    new: '1.3.0',
+    desc: true,
+  },
+  */
+  // END - Comment out Boss sync options
   {
     cate: cate.APPEARANCE,
     name: 'enableSearch',
