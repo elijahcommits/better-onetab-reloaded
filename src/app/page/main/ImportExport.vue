@@ -35,6 +35,7 @@
           <v-btn @click="copy" :disabled="!exportData">{{ __('ui_copy') }}</v-btn>
           <v-btn @click="save" :disabled="!exportType">{{ __('ui_save_as_file') }}</v-btn>
           <v-btn
+            v-if="showGoogleDriveButton"
             color="success" @click="saveToGdrive"
             :loading="saving"
           >
@@ -78,6 +79,7 @@ export default {
       processing: false,
       file: null,
       saving: false,
+      showGoogleDriveButton: false, // Set to 'false' to hide the button
     }
   },
   computed: {
