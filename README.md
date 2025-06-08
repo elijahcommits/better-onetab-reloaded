@@ -66,7 +66,7 @@ Build your own from following steps：
 
 ### Special thanks
 
-Thanks for [@cnwangjie](https://github.com/cnwangjie/) for developing the original version of this app.
+Thanks for [@cnwangjie](https://github.com/cnwangjie/) for developing the original version of this app, and for giving me permission to continue his legacy. -Elijah
 
 ### License
 
