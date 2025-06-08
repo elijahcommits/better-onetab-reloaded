@@ -21,10 +21,9 @@ export default {
   created() {
     this.$store.dispatch('initializeState')
 
-    // This is the new logic to detect the popup context.
+    // This logic adds the .icetab-popup class to the <html> element
     if (window.location.pathname.endsWith('popup.html')) {
-      // If we are in the popup, add a specific class to the root <html> element.
-      document.documentElement.classList.add('icetab-popup');
+      document.documentElement.classList.add('icetab-popup')
     }
 
     /* eslint-disable-next-line */
@@ -42,22 +41,5 @@ export default {
 </script>
 
 <style lang="scss">
-/* These styles will ONLY apply when the <html> element has the .icetab-popup class.
-  This fixes the popup without affecting the full-sized options page.
-*/
-html.icetab-popup {
-  /* 1. Constrain the document size to the popup's max dimensions. */
-  width: 600px;
-  height: 600px;
-
-  /* 2. Completely disable scrolling on the main document. */
-  overflow: hidden;
-
-  /* 3. Make the #app container the new scrolling viewport. */
-  #app {
-    height: 100%;
-    overflow-y: auto;   /* Allow vertical scrolling INSIDE the app if needed */
-    overflow-x: hidden;  /* Forbid horizontal scrolling */
-  }
-}
+/* All previous CSS fixes should be removed from here. */
 </style>

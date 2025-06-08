@@ -20,7 +20,7 @@
       "32": "assets/icons/icon32.png",
       "48": "assets/icons/icon48.png"
     },
-    "default_popup": "popup.html"
+    "default_popup": "index.html?context=popup"
   },
   "options_page": "index.html#/app/options",
   "commands": {

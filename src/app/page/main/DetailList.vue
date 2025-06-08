@@ -299,13 +299,10 @@ export default {
         value: [],
         input: '',
       },
-      // tagInView: null,
     }
   },
   watch: {
-    // '$route.query.p': 'updateExpandStatus',
     listsToDisplay: 'updateExpandStatus',
-    // '$route.params.tag': 'setTagInView'
   },
   computed: {
     ...mapGetters(['inPageLists', 'getPageLength', 'taggedList', 'indexedLists', 'pinnedList']),
@@ -356,7 +353,6 @@ export default {
     ]),
     init() {
       if (DEBUG) window.dl = this
-      // this.setTagInView()
       this.getLists().then(() => {
         this.updateExpandStatus()
         if (!this.processed) {
@@ -405,14 +401,11 @@ export default {
       $event.preventDefault()
       this.showMenu = false
       this.rightClickedListIndex = listIndex
-
-      // refer gmail behaviour: unselect all except it if clicked item is not selected
       if (!this.lists[listIndex].tabs[tabIndex].selected) {
         for (let i = 0; i < this.lists[listIndex].tabs.length; i += 1) {
           this.tabSelected([listIndex, i, i === tabIndex])
         }
       }
-
       this.$refs.contextMenu.x = $event.clientX
       this.$refs.contextMenu.y = $event.clientY
       this.$nextTick(() => {
@@ -425,7 +418,6 @@ export default {
       list.tabs.forEach((tab, tabIndex) => {
         if (tab.selected) {
           selectedItems.push({
-          // for avoid to change old functions
             listIndex: this.rightClickedListIndex,
             tabIndex,
           })
@@ -443,11 +435,10 @@ export default {
       })
       items.sort((a, b) => b.tabIndex - a.tabIndex)
         .forEach(({listIndex, tabIndex}) => this.removeTabDirectly([listIndex, tabIndex]))
-
       if (targetListIndex === -1) {
         const newList = createNewTabList({tabs})
         this.addList([newList])
-        this.tabMoved(changedLists.map(i => i + 1)) // it will create a new list
+        this.tabMoved(changedLists.map(i => i + 1))
       } else {
         tabs.forEach(tab => this.addTab([targetListIndex, tab]))
         this.tabMoved(changedLists)
@@ -556,10 +547,14 @@ export default {
     tagChanged(tags) {
       this.setTags([this.tag.listIndex, tags])
     },
-    // setTagInView() {
-    //   this.tagInView = this.$route.params.tag
-    // }
-  }
+  },
+  updated() {
+    // This function runs every time the component updates.
+    const contentElement = this.$el.closest('.v-content')
+    if (contentElement && contentElement.style.paddingTop !== '0px') {
+      contentElement.style.paddingTop = '0px'
+    }
+  },
 }
 </script>
 <style lang="scss" scoped>

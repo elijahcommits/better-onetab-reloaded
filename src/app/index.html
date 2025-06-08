@@ -4,15 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>*IceTab*</title>
+  <title>IceTab</title>
   <style>
-    /* A clean, universal reset for the body margin is all we need here. */
     body {
+      /* Removes the browser's default margin, which can cause scrollbars */
       margin: 0;
+    }
+
+    #app {
+      /* Sets a fixed width for the app, preventing the layout from collapsing */
+      min-width: 700px;
+    }
+
+    .v-application--wrap {
+      /* Overrides Vuetify's default min-height to prevent vertical overflow in the popup */
+      min-height: auto !important;
+    }
+
+    .is-popup .v-main__wrap,
+    .is-popup .v-content__wrap {
+      /* Adds space on the right side. Adjust this value as needed. */
+      padding-right: 32px;
     }
   </style>
 </head>
 <body>
   <div id="app"></div>
-  </body>
+</body>
 </html>

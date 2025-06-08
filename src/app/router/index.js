@@ -11,14 +11,17 @@ const DetailList = () => import(/* webpackChunkName: "main" */ '@/app/page/main/
 
 Vue.use(Router)
 
-const isPopup = window.location.pathname.endsWith('popup.html')
+const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup'
 
 const router = new Router({
   routes: [
     {
       path: '/',
       // When in a popup, go directly to the detailed list view.
-      redirect: isPopup ? '/app/list' : '/app'
+      redirect: () => {
+        const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup'
+        return isPopup ? '/app/list' : '/app'
+      }
     },
     {
       path: '/popup',

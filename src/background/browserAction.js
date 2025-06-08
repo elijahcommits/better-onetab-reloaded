@@ -20,15 +20,16 @@ export const getBrowserActionHandler = action => actions[action] || _.noop // Re
 export const updateBrowserAction = async (action, tmp = false) => {
   if (!tmp) currentBrowserAction = action
 
-  coverBrowserActionFn = _.noop // Replaced empty arrow function with _.noop
+  coverBrowserActionFn = _.noop
 
   const {items} = _.find(options.getOptionsList(), {name: 'browserAction'})
   const {label} = _.find(items, {value: action})
   console.log('action is: ', action, 'set title as: ', label)
-  await browser.action.setTitle({title: label}) // Manifest V3 uses browser.action
+  await browser.action.setTitle({title: label})
 
   if (action === 'popup') {
-    await browser.action.setPopup({popup: 'popup.html'})
+    // Correct the path here to match what's in your manifest
+    await browser.action.setPopup({popup: 'index.html?context=popup'})
   } else {
     await browser.action.setPopup({popup: ''})
 

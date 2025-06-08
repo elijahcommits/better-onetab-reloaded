@@ -93,7 +93,7 @@
     "message": "Open tab list when new tab"
   },
   "opt_desc_openTabListWhenNewTab": {
-    "message": "Always open tab list when clicking on the icon if current tab is a new tab. (Doesn't work if behavior is set to \"popup simple list\""
+    "message": "Always open tab list when clicking on the icon if current tab is a new tab. (Doesn't work if behavior is set to \"popup tiny list\""
   },
   "opt_name_alertRemoveList": {
     "message": "Confirm to remove list"
@@ -132,7 +132,7 @@
     "message": "Disable search feature"
   },
   "opt_label_popup": {
-    "message": "Popup simple list"
+    "message": "Popup tiny list"
   },
   "opt_label_store_selected": {
     "message": "Store selected tabs"

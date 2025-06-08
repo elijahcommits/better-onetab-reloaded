@@ -63,7 +63,9 @@ export default new Vuex.Store({
       if (loadedOptions) {
         commit('setOption', loadedOptions)
       }
-      if (window.location.pathname.endsWith('popup.html')) {
+      // Check for the 'context=popup' query parameter
+      const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup'
+      if (isPopup) {
         commit('setDrawer', false)
       } else {
         const drawer = await storage.get('drawer')
