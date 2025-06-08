@@ -22,7 +22,7 @@
     },
     "default_popup": "popup.html"
   },
-  "options_page": "index.html",
+  "options_page": "index.html#/app/options",
   "commands": {
     "store-selected-tabs": {
       "description": "__MSG_cmd_store_selected_tabs__"

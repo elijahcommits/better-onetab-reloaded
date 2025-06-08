@@ -21,22 +21,13 @@
 </v-app>
 </template>
 <script>
-import __ from '@/common/i18n'
-
 import drawer from '@/app/component/main/Drawer'
 import toolbar from '@/app/component/main/Toolbar'
 import snackbar from '@/app/component/main/Snackbar'
 
-import {mapState, mapActions} from 'vuex'
+import {mapState} from 'vuex'
 
 export default {
-  data() {
-    return {
-      syncing: false,
-      lastUpdated: NaN,
-      uploadError: null,
-    }
-  },
   components: {
     drawer,
     toolbar,
@@ -45,19 +36,6 @@ export default {
   computed: {
     ...mapState(['drawer', 'nightmode', 'opts']),
   },
-  created() {
-    this.init()
-  },
-  methods: {
-    __,
-    ...mapActions(['loadOptions', 'checkToken', 'loadNightmode', 'loadDrawer', 'switchDrawer']),
-    init() {
-      this.loadNightmode()
-      this.checkToken()
-      this.loadDrawer()
-      this.loadOptions()
-    },
-  }
 }
 </script>
 <style>

@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 const Popup = () => import(/* webpackChunkName: "popup" */ '@/app/page/Popup')
 const Main = () => import(/* webpackChunkName: "main" */ '@/app/page/Main')
-const SyncInfo = () => import(/* webpackChunkName: "main" */ '@/app/page/main/SyncInfo')
+// const SyncInfo = () => import(/* webpackChunkName: "main" */ '@/app/page/main/SyncInfo')
 const Options = () => import(/* webpackChunkName: "main" */ '@/app/page/main/Options')
 const About = () => import(/* webpackChunkName: "main" */ '@/app/page/main/About')
 const ImportExport = () => import(/* webpackChunkName: "main" */ '@/app/page/main/ImportExport')
@@ -29,11 +29,11 @@ const router = new Router({
       path: '/app',
       component: Main,
       children: [
-        {
-          path: 'options/sync',
-          component: SyncInfo,
-          name: 'syncInfo',
-        },
+        // {
+        //   path: 'options/sync',
+        //   component: SyncInfo,
+        //   name: 'syncInfo',
+        // },
         {
           path: 'options',
           component: Options,

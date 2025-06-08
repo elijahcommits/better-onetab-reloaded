@@ -55,23 +55,8 @@
                 <v-divider v-if="optionIndex !== optionsList.length - 1"></v-divider>
               </template>
             </v-list>
-          </div>  <v-subheader>{{ __('ui_options_sync') }}</v-subheader>
-
-          <v-list>
-            <v-list-tile>
-              <v-list-tile-content>
-                <v-subheader>
-                  Sync
-                </v-subheader>
-              </v-list-tile-content>
-              <v-list-tile-action>
-                <v-btn icon ripple :to="'/app/options/sync'">
-                  <v-icon color="grey lighten-1">arrow_forward</v-icon>
-                </v-btn>
-              </v-list-tile-action>
-            </v-list-tile>
-          </v-list>
-          </v-card-text>
+          </div>
+        </v-card-text>
       </v-card>
 
     </v-flex>
@@ -99,7 +84,7 @@ const currentVersion = browser.runtime.getManifest().version
 export default {
   data() {
     return {
-      optionsLists: _.groupBy(options.optionsList, 'cate'),
+      optionsLists: _.groupBy(options.getOptionsList(), 'cate'),
       snackbar: false,
     }
   },

@@ -17,7 +17,7 @@ const getDateFnsLocale = uiLocale => dateFnsLocales[uiLocale.split('-')[0]] || e
 export const formatTime = time => {
   const date = new Date(time)
   const now = new Date()
-  const locale = getDateFnsLocale(__('@@ui_locale')) // Corrected typo: ___ to __
+  const locale = getDateFnsLocale(__('@@ui_locale'))
 
   // If time difference is less than 1 hour (3600E3 milliseconds)
   if (now.getTime() - time < 3600E3) {
