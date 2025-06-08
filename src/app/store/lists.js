@@ -13,8 +13,6 @@ import {
   CHANGE_LIST_ORDER,
 } from '@/common/constants'
 
-listManager.init()
-
 export default {
   state: {
     lists: [],

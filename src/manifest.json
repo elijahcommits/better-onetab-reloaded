@@ -20,9 +20,9 @@
       "32": "assets/icons/icon32.png",
       "48": "assets/icons/icon48.png"
     },
-    "default_popup": "index.html#/popup"
+    "default_popup": "popup.html"
   },
-  "options_page": "index.html#/app/options",
+  "options_page": "index.html",
   "commands": {
     "store-selected-tabs": {
       "description": "__MSG_cmd_store_selected_tabs__"

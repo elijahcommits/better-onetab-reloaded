@@ -7,7 +7,7 @@ const cate = {
   PERFOREMANCE: 'performance',
 }
 
-export const optionsList = [
+export const getOptionsList = () => [
   {
     cate: cate.BEHAVIOUR,
     name: 'browserAction',
@@ -296,16 +296,9 @@ export const optionsList = [
     default: false,
     new: '1.4.0',
   },
-]
+].filter(i => !i.deprecated)
 
-const availableOptionsList = optionsList.filter(i => !i.deprecated)
-
-if (DEBUG) {
-  console.debug('current options number', availableOptionsList.length)
-  window.printOptionsMap = () => console.debug(availableOptionsList.map(i => i.name + ': ' + i.type.name + ',').join('\n'))
-}
-
-const _defaultOptions = _.mapValues(_.keyBy(availableOptionsList, 'name'), i => i.default)
+const _defaultOptions = _.mapValues(_.keyBy(getOptionsList(), 'name'), i => i.default)
 const getDefaultOptions = () => _defaultOptions
 
-export default {getDefaultOptions, optionsList: availableOptionsList}
+export default {getDefaultOptions, getOptionsList}

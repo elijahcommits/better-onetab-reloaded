@@ -30,8 +30,10 @@ logger.init = (opts = {}) => {
   // Initialize Sentry only if not in DEBUG mode
   if (!DEBUG) {
     const {Vue} = opts
-    const integrations = Sentry.defaultIntegrations
-    if (Vue) integrations.push(new Integrations.Vue({Vue}))
+    const integrations = Sentry.defaultIntegrations.slice() // Create a mutable copy
+    if (Vue) {
+      integrations.push(new Integrations.Vue({Vue}))
+    }
     Sentry.init({
       environment: 'production', // Explicitly production if not DEBUG
       release: 'v' + manifest.version,

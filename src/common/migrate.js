@@ -4,7 +4,6 @@ import logger from './logger'
 import {genObjectId, compareVersion} from './utils'
 import listManager from './listManager'
 import browser from 'webextension-polyfill'
-listManager.init()
 
 const migrations = {
   '1.4.0': async () => {

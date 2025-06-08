@@ -24,7 +24,11 @@ const app = new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App) // signal to Vue that we don't need its in-browser compiler
+  created() {
+    // Dispatch our single, reliable initialization action.
+    this.$store.dispatch('initializeState')
+  },
+  render: h => h(App)
 })
 
 if (DEBUG) {

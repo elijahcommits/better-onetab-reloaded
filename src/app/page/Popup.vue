@@ -1,8 +1,9 @@
 <template>
   <v-app :style="{width: '360px'}" :dark="nightmode">
     <v-list dense v-if="lists.length > 0">
-      <template v-for="(list, index) in lists" :key="list._id">
+      <template v-for="(list, index) in lists">
         <v-list-tile
+          :key="list._id"
           ripple
           @click="clicked(index)"
           :color="list.color"
@@ -21,7 +22,7 @@
             </div>
           </v-list-tile-action>
         </v-list-tile>
-        <v-divider v-if="index + 1 < lists.length"></v-divider>
+        <v-divider :key="list._id + '-divider'" v-if="index + 1 < lists.length"></v-divider>
       </template>
     </v-list>
 
@@ -47,10 +48,23 @@ import __ from '@/common/i18n'
 import storage from '@/common/storage'
 import {formatTime, sendMessage} from '@/common/utils'
 import browser from 'webextension-polyfill'
+import { normalizeList } from '@/common/list'
+
+/**
+ * @typedef {object} List - Defines the structure for a list object.
+ * @property {string} _id - The unique identifier for the list.
+ * @property {object[]} tabs - The array of tabs in the list.
+ * @property {string} [title] - The optional title for the list.
+ * @property {boolean} [pinned] - Whether the list is pinned.
+ * @property {any[]} [tags] - Optional tags for the list.
+ * @property {number} [time] - Timestamp of creation.
+ * @property {string} [color] - The color for the list item.
+ */
 
 export default {
   data() {
     return {
+      /** @type {List[]} */
       lists: [],
       action: '',
       nightmode: false,
@@ -75,19 +89,30 @@ export default {
       return title
     },
     async init() {
-      // Get nightmode state from the service worker using a message
-      const { nightmode } = await browser.runtime.sendMessage({
-        type: 'getGlobalState',
-        key: 'nightmode'
-      })
-      this.nightmode = nightmode || false
+      try {
+        // Run all our startup tasks in parallel
+        const [nightmodeResponse, lists, opts] = await Promise.all([
+          browser.runtime.sendMessage({
+            type: 'getGlobalState',
+            key: 'nightmode'
+          }),
+          storage.getLists(),
+          storage.getOptions(),
+        ])
 
-      // The rest of the initialization
-      const lists = await storage.getLists()
-      this.lists = lists
-      const opts = await storage.getOptions()
-      this.action = (opts && opts.popupItemClickAction) || 'restore'
-      this.processed = true
+        this.nightmode = (nightmodeResponse && nightmodeResponse.nightmode) || false
+        this.action = (opts && opts.popupItemClickAction) || 'restore'
+        this.lists = lists.map(normalizeList)
+
+      } catch (error) {
+        // If anything goes wrong, log the error to the console.
+        console.error('Failed to initialize the popup:', error)
+        // The list will be empty, and the "No list" message will be shown.
+      } finally {
+        // This is crucial: always set processed to true, even if there was an error,
+        // to ensure the loading spinner doesn't get stuck.
+        this.processed = true
+      }
     },
     clicked(index) {
       if (!['restore', 'restore-new-window'].includes(this.action)) return

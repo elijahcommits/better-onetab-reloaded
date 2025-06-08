@@ -72,13 +72,12 @@ module.exports = {
       ],
     }),
 
-    // --- START CHANGES: Add HtmlWebpackPlugin for popup.html and options.html ---
-    // For your Popup page
+    // Plugin for the popup page
     new HtmlWebpackPlugin({
-      filename: 'popup.html', // Output filename in 'dist'
-      template: 'src/app/index.html', // Source HTML template
-      chunks: ['app'], // Include only the 'app' chunk (your main Vue app bundle)
-      inject: true, // Inject JS into the HTML
+      filename: 'popup.html',
+      template: 'src/app/index.html',
+      chunks: ['app'],
+      inject: true,
       minify: PRODUCTION ? {
         removeComments: true,
         collapseWhitespace: true,
@@ -86,27 +85,11 @@ module.exports = {
       } : false,
     }),
 
-    // For your Options Page
-    new HtmlWebpackPlugin({
-      filename: 'options.html', // Output filename in 'dist'
-      template: 'src/app/index.html', // Source HTML template
-      chunks: ['app'], // Include only the 'app' chunk
-      inject: true, // Inject JS into the HTML
-      minify: PRODUCTION ? {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-      } : false,
-    }),
-    // --- END CHANGES: Add HtmlWebpackPlugin for popup.html and options.html ---
-
-    // Your existing HtmlWebpackPlugin for index.html (if it's still needed, e.g., for a new tab page)
-    // If your popup and options are the *only* pages using the 'app' entry,
-    // you might consider removing this one to avoid an unused 'index.html' file.
+    // Plugin for the main options/app page
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'src/app/index.html',
-      excludeChunks: ['background', 'content', 'exchanger'], // Ensure these entry points are NOT injected here
+      excludeChunks: ['background', 'content', 'exchanger'],
       inject: true,
       minify: PRODUCTION ? {
         removeComments: true,
@@ -124,18 +107,13 @@ module.exports = {
   optimization: {
     splitChunks: {
       name: 'vendors',
-      // You might want to adjust minChunks for better caching
-      // minChunks: Infinity, // This will create one large vendor chunk
-      // Consider `minChunks: 2` to share modules used in at least 2 entry points
     },
-    minimizer: [], // minimizers are typically configured in webpack.prod.js (as you have)
+    minimizer: [],
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      // --- START CHANGE: Point Vue to its runtime-only build ---
-      'vue$': 'vue/dist/vue.runtime.esm.js', // THIS IS CRUCIAL for Manifest V3 CSP
-      // --- END CHANGE: Point Vue to its runtime-only build ---
+      'vue$': 'vue/dist/vue.runtime.esm.js',
       '@': resolve('src'),
     }
   },
@@ -173,32 +151,25 @@ module.exports = {
           'stylus-loader'
         ]
       },
-      // --- START CHANGES: Updated Asset Module Rules ---
       {
-        // Rule for fonts (woff2, eot, ttf, otf, svg)
         test: /\.(woff2?|eot|ttf|otf|svg)(\?.*)?$/,
-        type: 'asset/resource', // Emits a separate file like file-loader
+        type: 'asset/resource',
         generator: {
-          // This ensures assets are placed in 'dist/assets/webfonts/' (or similar)
-          // and referenced correctly. Adjust path if your CSS expects them elsewhere.
           filename: 'assets/webfonts/[name][ext]',
         },
       },
       {
-        // Rule for images (png, jpeg, gif, webp, etc.)
         test: /\.(png|jpe?g|gif|webp)$/i,
-        type: 'asset', // Automatically chooses between resource (separate file) and inline (data URI)
+        type: 'asset',
         parser: {
           dataUrlCondition: {
-            maxSize: 8 * 1024, // Assets smaller than 8KB will be inlined (like url-loader)
+            maxSize: 8 * 1024,
           },
         },
         generator: {
-          // This ensures images are placed in 'dist/assets/img/' (or similar)
           filename: 'assets/img/[name][ext]',
         },
       },
-      // --- END CHANGES: Updated Asset Module Rules ---
       {
         test: /\.md$/,
         use: [

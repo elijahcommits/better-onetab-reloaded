@@ -4,7 +4,6 @@ import _ from 'lodash'
 import browser from 'webextension-polyfill'
 import listManager from './listManager'
 import {ILLEGAL_URLS} from './constants'
-listManager.init()
 
 const getAllInWindow = windowId => browser.tabs.query({windowId})
 

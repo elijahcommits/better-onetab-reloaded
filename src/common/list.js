@@ -20,6 +20,10 @@ export const validateList = list => list != null && Array.isArray(list.tabs)
 
 // Preserving the needed properties before store lists.
 export const normalizeList = list => {
+  // If a list has no _id, assign a new one.
+  if (!list._id) {
+    list._id = genObjectId()
+  }
   const normalizedList = _.pick(list, PICKED_LIST_RPOPS)
   normalizedList.tabs = normalizedList.tabs.map(normalizeTab)
   return normalizedList

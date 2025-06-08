@@ -22,13 +22,13 @@ export const updateBrowserAction = async (action, tmp = false) => {
 
   coverBrowserActionFn = _.noop // Replaced empty arrow function with _.noop
 
-  const {items} = _.find(options.optionsList, {name: 'browserAction'})
+  const {items} = _.find(options.getOptionsList(), {name: 'browserAction'})
   const {label} = _.find(items, {value: action})
   console.log('action is: ', action, 'set title as: ', label)
   await browser.action.setTitle({title: label}) // Manifest V3 uses browser.action
 
   if (action === 'popup') {
-    await browser.action.setPopup({popup: 'index.html#/popup'})
+    await browser.action.setPopup({popup: 'popup.html'})
   } else {
     await browser.action.setPopup({popup: ''})
 

@@ -112,7 +112,7 @@ const createMenus = async (obj, parent, contexts, lists) => {
       }
       const id = await browser.contextMenus.create(prop)
       console.log('context menu created: ' + id)
-      if (_.isObject(obj[key])) await createMenus(obj[key], key, contexts, lists)
+      if (_.isPlainObject(obj[key])) await createMenus(obj[key], key, contexts, lists)
     }
   }
 }
@@ -122,21 +122,17 @@ export const handleContextMenuClicked = info => {
   if (info.menuItemId.startsWith('STORE_TO_TITLED_LIST')) {
     const [key, listIndex] = info.menuItemId.split('|')
     _.get(menus, key)(+listIndex)
-    // Removed Google Analytics call
-    // if (PRODUCTION) ga('send', 'event', 'Menu clicked', key)
   } else {
     _.get(menus, info.menuItemId)()
-    // Removed Google Analytics call
-    // if (PRODUCTION) ga('send', 'event', 'Menu clicked', info.menuItemId)
   }
 }
 
 export const setupContextMenus = async ({pageContext, allContext}) => {
   await browser.contextMenus.removeAll()
-  const contexts = [browser.contextMenus.ContextType.ACTION] // Changed to ACTION for Manifest V3
+  const contexts = ['action']
   if (pageContext) {
-    contexts.push(browser.contextMenus.ContextType.PAGE)
-    if (allContext) contexts.push(browser.contextMenus.ContextType.ALL)
+    contexts.push('page')
+    if (allContext) contexts.push('all')
   }
   const lists = await storage.getLists()
 

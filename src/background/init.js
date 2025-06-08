@@ -77,15 +77,19 @@ const fixDirtyData = async () => {
 }
 
 const init = async () => {
-  logger.init()
-  await listManager.init()
-  const opts = await initOptions()
-  await updateBrowserAction(opts.browserAction)
-  await setupContextMenus(opts)
+  try {
+    logger.init()
+    await listManager.init()
+    const opts = await initOptions()
+    await updateBrowserAction(opts.browserAction)
+    await setupContextMenus(opts)
 
-  await Promise.all([
-    browser.commands.onCommand.addListener(commandHandler),
-    browser.runtime.onMessageExternal.addListener(commandHandler),
+    browser.runtime.onInstalled.addListener(async () => {
+      const opts = await initOptions();
+      await setupContextMenus(opts);
+    });
+    browser.commands.onCommand.addListener(commandHandler)
+    browser.runtime.onMessageExternal.addListener(commandHandler)
     browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       if (msg.type === 'getGlobalState') {
         if (msg.key === 'drawer') {
@@ -113,28 +117,24 @@ const init = async () => {
       }
 
       messageHandler(msg);
-    }),
-    browser.runtime.onUpdateAvailable.addListener(detail => { updateVersion_global = detail.version }),
+    });
+    browser.runtime.onUpdateAvailable.addListener(detail => { updateVersion_global = detail.version })
     browser.action.onClicked.addListener(async () => {
       const handler = getBrowserActionHandler(opts_global.browserAction);
       if (handler) {
         await handler();
       }
-    }),
-    browser.contextMenus.onClicked.addListener(info => handleContextMenuClicked(info)),
-    browser.tabs.onActivated.addListener(_.debounce(tabsChangedHandler, 200)),
-    browser.storage.onChanged.addListener(storageChangedHandler),
-  ])
-  await migrate()
-  await fixDirtyData()
-  // Conditionally initialize Boss sync service based on user option
-  /*
-  if (opts_global.useBoss) {
-    await boss.init()
-  } else {
-    console.log('Boss sync service disabled by user option.');
+    });
+    browser.contextMenus.onClicked.addListener(info => handleContextMenuClicked(info));
+    browser.tabs.onActivated.addListener(_.debounce(tabsChangedHandler, 200));
+    browser.storage.onChanged.addListener(storageChangedHandler);
+
+    await migrate()
+    await fixDirtyData()
+
+  } catch (error) {
+    console.error("A critical error occurred during background script initialization:", error);
   }
-  */
 }
 
 export default init

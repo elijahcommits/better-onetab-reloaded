@@ -10,12 +10,11 @@ import {sleep} from '@/common/utils'
 import lists from './lists'
 
 Vue.use(Vuex)
-listManager.init()
 
 export default new Vuex.Store({
   strict: DEBUG,
   state: {
-    opts: options.getDefaultOptions(), // 'options' is used here
+    opts: options.getDefaultOptions(),
     hasToken: false,
     drawer: true,
     nightmode: false,
@@ -58,19 +57,20 @@ export default new Vuex.Store({
     ...lists.mutations,
   },
   actions: {
-    async initializeState({commit}) {
+    async initializeState({ commit, dispatch }) {
+      await listManager.init()
       const loadedOptions = await storage.getOptions()
       if (loadedOptions) {
         commit('setOption', loadedOptions)
       }
-      const { drawer } = await storage.get('drawer')
-      commit('setDrawer', _.defaultTo(drawer, true))
-
-      // commit('checkToken', await boss.hasToken())
-    },
-    checkToken({commit}) { // Removed 'async' keyword
-      // commit('setToken', await boss.hasToken())
+      if (window.location.pathname.endsWith('popup.html')) {
+        commit('setDrawer', false)
+      } else {
+        const drawer = await storage.get('drawer')
+        commit('setDrawer', _.defaultTo(drawer, true))
+      }
       commit('setToken', false)
+      await dispatch('preloadLists')
     },
     async setAndSaveOption({ commit, state }, { key, value }) {
       const newOpts = { ...state.opts, [key]: value }

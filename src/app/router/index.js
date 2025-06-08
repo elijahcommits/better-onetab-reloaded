@@ -11,8 +11,15 @@ const DetailList = () => import(/* webpackChunkName: "main" */ '@/app/page/main/
 
 Vue.use(Router)
 
+const isPopup = window.location.pathname.endsWith('popup.html')
+
 const router = new Router({
   routes: [
+    {
+      path: '/',
+      // When in a popup, go directly to the detailed list view.
+      redirect: isPopup ? '/app/list' : '/app'
+    },
     {
       path: '/popup',
       component: Popup,
@@ -70,20 +77,5 @@ const router = new Router({
     },
   ]
 })
-
-// Removed Google Analytics (tracker) import and related logic
-// if (PRODUCTION) {
-//  import(
-//    /* webpackChunkName: "tracker", webpackMode: "lazy" */
-//    '@/common/tracker'
-//  ).then(({tracker}) => {
-//    tracker()
-//    router.beforeEach((to, from, next) => {
-//      ga('set', 'page', to.name)
-//      ga('send', 'pageview')
-//      next()
-//    })
-//  })
-// }
 
 export default router
