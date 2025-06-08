@@ -10,6 +10,13 @@ This project is a continuation and maintenance effort for the excellent [Better 
   <img src="IceTab_banner.png">
 </p>
 
+<p align="center">
+<a href="https://github.com/elijahcommits/icetab/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=elijahcommits/icetab" />
+</a>
+<p align="center">^graphic made using <a href="https://contrib.rocks">contrib.rocks</a></p>
+</p>
+
 <!-- <p align="center">
 <a href="https://circleci.com/gh/cnwangjie/better-onetab"><img src="https://img.shields.io/circleci/project/github/cnwangjie/better-onetab/master.svg?style=flat-square" alt="CircleCI"></a>
 <a href="https://chrome.google.com/webstore/detail/better-onetab/eookhngofldnbnidjlbkeecljkfpmfpg"><img src="https://img.shields.io/chrome-web-store/v/eookhngofldnbnidjlbkeecljkfpmfpg.svg?style=flat-square" alt="Chrome Web Store"></a>
