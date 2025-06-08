@@ -148,8 +148,16 @@ export default {
     async saveToGdrive() {
       this.saving = true
       try {
-        await gdrive.saveCurrentTabLists()
-        this.showSnackbar(__('ui_main_succeeded'))
+        // Capture the result object from gdrive.saveCurrentTabLists()
+        const result = await gdrive.saveCurrentTabLists()
+        // Check the success property of the result
+        if (result.success) {
+          this.showSnackbar(__('ui_main_succeeded'))
+        } else {
+          // If not successful, use the message provided by the result,
+          // or a generic error message if no specific message is provided.
+          this.showSnackbar(result.message || __('ui_main_error_occurred'))
+        }
       } catch (e) {
         logger.error(e)
         this.showSnackbar(__('ui_main_error_occurred'))

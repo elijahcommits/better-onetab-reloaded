@@ -4,6 +4,7 @@
   "version": "2025.6.7",
   "default_locale": "en",
   "description": "__MSG_ext_desc__",
+  "key": "MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvt1uCJaPGznWoI8HK00/TIt3z08dh56ysBL/10ZULl2ixJ7sh4NAFyADcXPItdPj/zF1s+1XdHHhCRv3aF4YwdJCwWX6Ybd0TD+g6XqAdW6LS4T/beLUdbJ08nyX0hq1yYbdwAyb58hxcN7/1ivwnJbn9qzukcJjRy0DFK/PNWh7C8Q7zGpgaryml37ecdcIoOlzqEEY/EiSUhxVGe7jtXl5mgVmZnrLBePTRvn8NadcaXWXyPY7BvP2WJLHIAqTHoDeJNNbP3knufgc63KJZL8uWzK2+2+mTGjW2W3ZEV4/S0CcT7Ii0E5uXny2s5RN1MIVBMrFnwEBnhcyywEyHAgMBAAECggEAGgrRzCMp98AHngjWounYjdFAFfAQP8lnRQNbM+KA9XvWL1NVH7tC+WhgAEjiN6x7buXp/sntOt0KUcBVxSnxYGMWQpyw74Rw3G9iGqyFjHRVWG272ho0tYywbRilNm1zbV1gI4DEGQ0x+NTmZUzY/DBSNW9YYpGxhH5cNhzCgG+Yw7BzpqAPZNn/1myHfZ1ToGk18eH/4isDiENzjvV2r8Qd3/itP1uvvg+MN+k6e8mCKZiCG1mcYImLg1/j5UwwZ5Q4S3nnDs+MyZuVaPAyyhYOW9+1q/tuhprBQ0Y43kVSK4uXKVyWm7Ho8ON2bSypa0WNPkUsmvVNH/JoOMumqQKBgQDmepvvgU3m2K2Ne+BLGvQQqIeFEGHgThxzSoAiCMd37ZlOEC25W3VN+U+xUM+EIloCdPh/Wdy0JAsKqjSHttlGGrdAgyjMeAN9Lb+y+wfhwUfSvdvuaDxtpqk71TWu4O/tPXYjHw/y2rbndTDSzg4o81h9/T4ZepteUMqutU0TuwKBgQDDLGOVYzSrA4E8bSTuabYpo2p1gxNSuRY5aa6Ar2e5Y6O0vw11mOHcE+bkDg93nC1gpg/Nvq6B1/iisd1Cd9gRbkwKxcjsQG8k9rYvOy0h8lARd1c7sjV3ErQVQ1a+zzlXcdsXMqyQkgBpvFDNFRrmZbjqCnYIfbznpLmwgAXvpQKBgBucNpADknyEGo5nd6Ans3NHbSywoLkJQnlBRIZPPO4OBZ6Ha6LX5P6ZTkW0o5d1sgi3UImZD0p5QuVdLHvRmMfALZHJ5JpSCkD1uRBM6E3QJLWHTxCJZivQmldznEG96qAmC7/7WaLDNsQVkuq+Co43ULOPIeBVgsVSsmUpjPk/AoGBAJrsADwTXDom9Q23ASqyBKO2kImouszeGBMInTiOgwH4YnjVcmSXLykXLx51PrfN44MlLcQ+CJ0OhtD16FCbeooTiA7BAoTtfIvVvbVt/pxEkGPc3ASJp8DVutZp9lBNgxGzUZpvYeT7z5IepfC0QP8DXa2BEkIZNLqW2cKNTKj1AoGBAKpKDLbp9DM+V1A6l8kjlbk33TKxHevKu3CkKQoYBt5vegAbcYh2IvJnBiV0/nNFJAxwbT+fiq1jscYnLpmoFMbs6JdbGOiq2bPs65Ceivo14mUDvzbbg8nQUSAwRAqABsQJq/F7d1Tz1tm7ag/4M1/JFmb1SRcvDeqAfJURIE5Q",
   "icons": {
     "16": "assets/icons/icon16.png",
     "32": "assets/icons/icon32.png",
@@ -23,41 +24,8 @@
     "default_popup": "index.html?context=popup"
   },
   "options_page": "index.html#/app/options",
-  "commands": {
-    "store-selected-tabs": {
-      "description": "__MSG_cmd_store_selected_tabs__"
-    },
-    "store-all-tabs": {
-      "description": "__MSG_cmd_store_all_tabs__"
-    },
-    "restore-lastest-list": {
-      "description": "__MSG_cmd_restore_lastest_list__"
-    },
-    "open-lists": {
-      "description": "__MSG_cmd_open_lists__"
-    },
-    "store-all-in-all-windows": {
-      "description": "__MSG_cmd_store_all_in_all_windows__"
-    }
-  },
-  "content_scripts": [
-    {
-      "matches": [
-        "https://www.google.com/search*",
-        "https://www.google.com.hk/search*",
-        "https://www.baidu.com/s*",
-        "https://www.bing.com/search*",
-        "https://duckduckgo.com/*",
-        "https://www.sogou.com/web*"
-      ],
-      "js": [
-        "content.js"
-      ],
-      "run_at": "document_start",
-      "all_frames": true
-    }
-  ],
   "permissions": [
+    "identity",
     "commands",
     "contextMenus",
     "storage",
@@ -68,12 +36,18 @@
     "<all_urls>"
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://*.google.com https://*.googleapis.com https://sentry.io ws://localhost:8098 http://127.0.0.1:3000 ws://127.0.0.1:3000;"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "sandbox": {
+    "pages": [
+      "gdrive_sandbox.html"
+    ]
   },
   "web_accessible_resources": [
     {
       "resources": [
-        "*"
+        "*",
+        "gdrive_sandbox.html"
       ],
       "matches": [
         "<all_urls>"

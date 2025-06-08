@@ -34,43 +34,31 @@ const resolve = (...paths) => path.join(__dirname, ...paths)
 const moz = process.env.MOZ
 
 module.exports = {
-  entry: {
-    app: ['./src/app/index.js'], // This is your main Vue app entry point
-    background: ['./src/background/index.js'],
-    content: './src/content.js',
-    exchanger: './src/exchanger.js',
-  },
-  output: {
-    path: resolve('dist'),
-    filename : '[name].js',
-  },
+  // ... other webpack config
   plugins: [
-    new webpack.ContextReplacementPlugin(/moment[/\\]locale$/, /zh-cn/),
-    new webpack.DefinePlugin({
-      DEBUG: mode === 'development',
-      PRODUCTION: mode !== 'development',
-      MOZ: moz,
-    }),
-    new CleanWebpackPlugin(), // CleanWebpackPlugin used without arguments for newer versions
-    new CopyWebpackPlugin({ // Corrected CopyWebpackPlugin syntax
-      patterns: [
-        {
-          from: 'src/manifest.json',
-          to: 'manifest.json',
-          transform(content, path) {
-            content = content.toString();
-            if (mode in config) {
-              Object.entries(config[mode]).map(([key, value]) => {
-                content = content.replace(new RegExp(key, 'g'), value);
-              });
-            }
-            return content;
+    // ... other plugins
+  new CopyWebpackPlugin({
+    patterns: [
+      {
+        from: 'src/manifest.json',
+        to: 'manifest.json',
+        transform(content, path) {
+          content = content.toString();
+          if (mode in config) {
+            Object.entries(config[mode]).map(([key, value]) => {
+              content = content.replace(new RegExp(key, 'g'), value);
+            });
           }
-        },
-        { from: 'src/assets/icons', to: 'assets/icons' },
-        { from: 'src/_locales', to: '_locales' },
-      ],
-    }),
+          return content;
+        }
+      },
+      { from: 'src/assets/icons', to: 'assets/icons' },
+      { from: 'src/_locales', to: '_locales' },
+      // Corrected paths for sandbox files
+      { from: 'src/gdrive_sandbox.html', to: 'gdrive_sandbox.html' },
+      { from: 'src/gdrive_sandbox.js', to: 'gdrive_sandbox.js' },
+    ],
+  }),
 
     // Plugin for the popup page
     new HtmlWebpackPlugin({

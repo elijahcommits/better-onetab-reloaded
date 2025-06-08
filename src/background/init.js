@@ -88,7 +88,11 @@ const init = async () => {
       const opts = await initOptions();
       await setupContextMenus(opts);
     });
-    browser.commands.onCommand.addListener(commandHandler)
+    if (browser.commands) {
+      browser.commands.onCommand.addListener(commandHandler)
+    } else {
+      console.warn("browser.commands API is not available. Keyboard shortcuts may not work.");
+    }
     browser.runtime.onMessageExternal.addListener(commandHandler)
     browser.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       if (msg.type === 'getGlobalState') {
