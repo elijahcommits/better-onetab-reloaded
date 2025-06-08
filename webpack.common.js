@@ -1,11 +1,8 @@
 /* eslint-disable */
 const webpack = require('webpack')
+const { merge } = require('webpack-merge') // Corrected import for webpack-merge
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-// Note: Your package.json lists clean-webpack-plugin ^0.1.19.
-// For newer versions (v3+), the syntax is `const { CleanWebpackPlugin } = require('clean-webpack-plugin');`
-// and `new CleanWebpackPlugin()`. If you update the plugin, you'll need to change this line and the plugin instantiation.
-// For now, keeping your existing `new CleanWebpackPlugin(['dist'])` as it matches your declared version.
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const VuetifyLoaderPlugin = require('vuetify-loader/lib/plugin')
@@ -58,24 +55,26 @@ module.exports = {
       PRODUCTION: mode !== 'development',
       MOZ: moz,
     }),
-    new CleanWebpackPlugin(['dist']), // Still using the older syntax as per your package.json version
-    new CopyWebpackPlugin([
-      {
-        from: 'src/manifest.json',
-        to: 'manifest.json',
-        transform(content, path) {
-          content = content.toString();
-          if (mode in config) {
-            Object.entries(config[mode]).map(([key, value]) => {
-              content = content.replace(new RegExp(key, 'g'), value);
-            });
+    new CleanWebpackPlugin(), // CleanWebpackPlugin used without arguments for newer versions
+    new CopyWebpackPlugin({ // Corrected CopyWebpackPlugin syntax
+      patterns: [
+        {
+          from: 'src/manifest.json',
+          to: 'manifest.json',
+          transform(content, path) {
+            content = content.toString();
+            if (mode in config) {
+              Object.entries(config[mode]).map(([key, value]) => {
+                content = content.replace(new RegExp(key, 'g'), value);
+              });
+            }
+            return content;
           }
-          return content;
-        }
-      },
-      { from: 'src/assets/icons', to: 'assets/icons' },
-      { from: 'src/_locales', to: '_locales' },
-    ]),
+        },
+        { from: 'src/assets/icons', to: 'assets/icons' },
+        { from: 'src/_locales', to: '_locales' },
+      ],
+    }),
 
     // --- START CHANGES: Add HtmlWebpackPlugin for popup.html and options.html ---
     // For your Popup page
@@ -128,7 +127,7 @@ module.exports = {
   },
   optimization: {
     splitChunks: {
-      name: true,
+      name: 'vendors',
       // You might want to adjust minChunks for better caching
       // minChunks: Infinity, // This will create one large vendor chunk
       // Consider `minChunks: 2` to share modules used in at least 2 entry points
