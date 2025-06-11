@@ -1,13 +1,19 @@
 <template>
-  <v-app :style="{width: '360px'}" :dark="nightmode">
-    <v-list dense v-if="lists.length > 0">
+  <v-app
+    :style="{width: '360px'}"
+    :dark="nightmode"
+  >
+    <v-list
+      v-if="lists.length > 0"
+      dense
+    >
       <template v-for="(list, index) in lists">
         <v-list-tile
           :key="list._id"
           ripple
-          @click="clicked(index)"
           :color="list.color"
           class="list-item"
+          @click="clicked(index)"
         >
           <v-list-tile-content>
             <v-list-tile-title><strong>[{{ list.tabs.length }}]</strong> {{ friendlyTitle(list) }}</v-list-tile-title>
@@ -15,31 +21,62 @@
           </v-list-tile-content>
           <v-list-tile-action>
             <div class="text-xs-right">
-              <v-btn small class="list-item-btn-hover" flat icon title="store select tab into this list" @click.stop="storeInto(index)">
-                <v-icon :style="{fontSize: '14px'}">add</v-icon>
+              <v-btn
+                small
+                class="list-item-btn-hover"
+                flat
+                icon
+                title="store select tab into this list"
+                @click.stop="storeInto(index)"
+              >
+                <v-icon :style="{fontSize: '14px'}">
+                  add
+                </v-icon>
               </v-btn>
-              <v-icon v-show="list.pinned" class="list-item-icon" color="blue" :style="{fontSize: '14px'}">fas fa-thumbtack</v-icon>
+              <v-icon
+                v-show="list.pinned"
+                class="list-item-icon"
+                color="blue"
+                :style="{fontSize: '14px'}"
+              >
+                fas fa-thumbtack
+              </v-icon>
             </div>
           </v-list-tile-action>
         </v-list-tile>
-        <v-divider :key="list._id + '-divider'" v-if="index + 1 < lists.length"></v-divider>
+        <v-divider
+          v-if="index + 1 < lists.length"
+          :key="list._id + '-divider'"
+        />
       </template>
     </v-list>
 
     <v-layout
+      v-if="!processed"
       :style="{minHeight: '100px'}"
-      v-if="!processed" align-center justify-center column fill-height>
+      align-center
+      justify-center
+      column
+      fill-height
+    >
       <v-progress-circular
         indeterminate
         color="primary"
-      ></v-progress-circular>
+      />
     </v-layout>
 
     <v-layout
+      v-if="processed && lists.length === 0"
       :style="{minHeight: '100px'}"
-      v-if="processed && lists.length === 0" align-center justify-center column fill-height
+      align-center
+      justify-center
+      column
+      fill-height
     >
-      <h3 class="display-2 grey--text" v-text="__('ui_no_list')"></h3>
+      <h3
+        class="display-2 grey--text"
+        v-text="__('ui_no_list')"
+      />
     </v-layout>
   </v-app>
 </template>

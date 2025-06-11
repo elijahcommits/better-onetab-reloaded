@@ -1,59 +1,105 @@
 <template>
-<div>
-  <transition-group
-    tag="div" name="slide" class="wrap"
-    v-if="!q"
-  >
-    <v-flex wrap xs12 sm6 offset-sm3 class="my-3 search-item" key="color" v-if="card > 0">
-      <v-card>
-        <v-subheader>Color</v-subheader>
-        <div>
-          <div class="color-placeholder" v-for="color in listColors" :key="color">
-            <router-link
-              class="lighten-3 color-btn" :class="color" replace
-              :to="{name: 'search', query: {q: encodeURIComponent('color:' + color + ' ')}}"
-            ></router-link>
-          </div>
-        </div>
-      </v-card>
-    </v-flex>
-    <v-flex wrap xs12 sm6 offset-sm3 class="my-3 search-item" key="tag" v-if="card > 1 && hasTags">
-      <v-card>
-        <v-subheader>Tag</v-subheader>
-
-        <v-container grid-list-lg fluid class="pa-0">
-          <v-layout row wrap>
-            <v-flex class="tag-placeholder pa-1" xs6 md4 lg3 v-for="(lists, tag) in taggedList" :key="tag">
-              <router-link :to="{name: 'search', query: {q: encodeURIComponent('tag:' + tag + ' ')}}">
-                <div class="tag-bg grey lighten-3">
-                  <v-icon x-large class="tag-icon">label</v-icon>
-                  <div class="tag-name">{{ tag }}</div>
-                </div>
-              </router-link>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-    </v-flex>
-  </transition-group>
-
-  <v-card v-if="q && items && items.length">
-    <v-list>
-      <v-list-tile
-        v-for="(item, index) in items" :key="index"
-        :to="{name: 'detailList', query: item.value}"
+  <div>
+    <transition-group
+      v-if="!q"
+      tag="div"
+      name="slide"
+      class="wrap"
+    >
+      <v-flex
+        v-if="card > 0"
+        key="color"
+        wrap
+        xs12
+        sm6
+        offset-sm3
+        class="my-3 search-item"
       >
-        <v-list-tile-content :class="item.color + '--text'">
-          <v-list-tile-title v-text="item.title"></v-list-tile-title>
-          <v-list-tile-sub-title v-text="item.subtitle"></v-list-tile-sub-title>
-        </v-list-tile-content>
-        <v-list-tile-action>
-          <v-icon>{{ 'tabIndex' in item.value ? 'link' : 'list' }}</v-icon>
-        </v-list-tile-action>
-      </v-list-tile>
-    </v-list>
-  </v-card>
-</div>
+        <v-card>
+          <v-subheader>Color</v-subheader>
+          <div>
+            <div
+              v-for="color in listColors"
+              :key="color"
+              class="color-placeholder"
+            >
+              <router-link
+                class="lighten-3 color-btn"
+                :class="color"
+                replace
+                :to="{name: 'search', query: {q: encodeURIComponent('color:' + color + ' ')}}"
+              />
+            </div>
+          </div>
+        </v-card>
+      </v-flex>
+      <v-flex
+        v-if="card > 1 && hasTags"
+        key="tag"
+        wrap
+        xs12
+        sm6
+        offset-sm3
+        class="my-3 search-item"
+      >
+        <v-card>
+          <v-subheader>Tag</v-subheader>
+
+          <v-container
+            grid-list-lg
+            fluid
+            class="pa-0"
+          >
+            <v-layout
+              row
+              wrap
+            >
+              <v-flex
+                v-for="(lists, tag) in taggedList"
+                :key="tag"
+                class="tag-placeholder pa-1"
+                xs6
+                md4
+                lg3
+              >
+                <router-link :to="{name: 'search', query: {q: encodeURIComponent('tag:' + tag + ' ')}}">
+                  <div class="tag-bg grey lighten-3">
+                    <v-icon
+                      x-large
+                      class="tag-icon"
+                    >
+                      label
+                    </v-icon>
+                    <div class="tag-name">
+                      {{ tag }}
+                    </div>
+                  </div>
+                </router-link>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-flex>
+    </transition-group>
+
+    <v-card v-if="q && items && items.length">
+      <v-list>
+        <v-list-tile
+          v-for="(item, index) in items"
+          :key="index"
+          :to="{name: 'detailList', query: item.value}"
+        >
+          <v-list-tile-content :class="item.color + '--text'">
+            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
+          </v-list-tile-content>
+          <v-list-tile-action>
+            <v-icon>{{ 'tabIndex' in item.value ? 'link' : 'list' }}</v-icon>
+          </v-list-tile-action>
+        </v-list-tile>
+      </v-list>
+    </v-card>
+  </div>
 </template>
 <script>
 import _ from 'lodash'
@@ -69,9 +115,6 @@ export default {
       items: [],
     }
   },
-  watch: {
-    q: 'search',
-  },
   computed: {
     ...mapGetters(['listColors', 'taggedList']),
     ...mapState(['lists']),
@@ -81,6 +124,9 @@ export default {
     hasTags() {
       return !_.isEmpty(this.taggedList)
     },
+  },
+  watch: {
+    q: 'search',
   },
   created() {
     if (this.q) this.search()

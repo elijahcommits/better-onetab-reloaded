@@ -1,18 +1,24 @@
+root: true
 env:
   es6: true
   browser: true
   webextensions: true
 extends:
-  - plugin:vue/base
-  - '@cnwangjie/eslint-config'
+  - eslint:recommended
+  - plugin:vue/recommended
 parserOptions:
-  parser: babel-eslint
-  ecmaVersion: 8
+  parser: '@babel/eslint-parser'
   sourceType: module
+  ecmaVersion: 2020
+  requireConfigFile: false
+  babelOptions:
+    plugins:
+      - "@babel/plugin-syntax-dynamic-import"
 rules:
   no-console: 0
+  vue/multi-word-component-names: 0
 globals:
-  DEBUG: true
-  PRODUCTION: true
-  MOZ: true
-  ga: true
+  DEBUG: readonly
+  PRODUCTION: readonly
+  MOZ: readonly
+  ga: readonly

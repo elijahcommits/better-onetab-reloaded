@@ -133,8 +133,6 @@
 //   try {
 //     await uploadOpsViaWS()
 //     await downloadRemoteLists()
-//   } catch (error) {
-//     throw error
 //   } finally {
 //     await unlock()
 //   }

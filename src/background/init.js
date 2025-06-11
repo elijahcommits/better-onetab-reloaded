@@ -1,6 +1,6 @@
 /* eslint-disable */
 import _ from 'lodash'
-import logger from '../common/logger'
+// import logger from '../common/logger' // The logger has been temporarily disabled for debugging
 import options from '../common/options'
 import storage from '../common/storage'
 import migrate from '../common/migrate'
@@ -78,7 +78,7 @@ const fixDirtyData = async () => {
 
 const init = async () => {
   try {
-    logger.init()
+    // await logger.init() // The logger has been temporarily disabled for debugging
     await listManager.init()
     const opts = await initOptions()
     await updateBrowserAction(opts.browserAction)

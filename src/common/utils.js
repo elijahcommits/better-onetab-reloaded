@@ -36,8 +36,6 @@ export const one = fn => {
     let re
     try {
       re = await fn.apply(this, args) // eslint-disable-line no-invalid-this
-    } catch (error) {
-      throw error
     } finally {
       executing = false
     }
@@ -129,8 +127,6 @@ export const throttle = (fn, ms) => {
     let re
     try {
       re = await fn.apply(this, args) // eslint-disable-line no-invalid-this
-    } catch (error) {
-      throw error
     } finally {
       executing = false
       if (next) {

@@ -2,7 +2,7 @@
   <v-app :dark="nightmode">
     <v-content>
       <v-container fluid>
-        <router-view></router-view>
+        <router-view />
       </v-container>
     </v-content>
   </v-app>
@@ -14,7 +14,7 @@ import '@/assets/css/fontawesome-all.min.css'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'app',
+  name: 'App',
   computed: {
     ...mapState(['nightmode'])
   },
@@ -25,17 +25,6 @@ export default {
     if (window.location.pathname.endsWith('popup.html')) {
       document.documentElement.classList.add('icetab-popup')
     }
-
-    /* eslint-disable-next-line */
-    if (PRODUCTION) import(
-      /* webpackChunkName: "tracker", webpackMode: "lazy" */
-      '@/common/tracker'
-    ).then(({tracker}) => {
-      tracker()
-      if (!this.$route.name) return
-      ga('set', 'page', this.$route.name)
-      ga('send', 'pageview')
-    })
   },
 }
 </script>

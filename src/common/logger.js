@@ -1,51 +1,67 @@
-import * as Sentry from '@sentry/browser'
-import * as Integrations from '@sentry/integrations'
-import {SENTRY_DSN} from './constants'
-import {isBackground} from './utils'
-import manifest from '../manifest.json'
+import { isBackground } from './utils';
+import manifest from '../manifest.json';
 
-const logger = {}
+const logger = {};
 
-// genMethods is now called after Sentry.init (if not DEBUG)
-const genMethods = () => {
-  for (const method in console) {
-    if (typeof console[method] !== 'function') continue
+// Create basic console methods immediately
+for (const method in console) {
+  if (typeof console[method] === 'function') {
     logger[method] = (...args) => {
-      console[method](...args)
-      // Only send data to Sentry if not in DEBUG mode
-      if (!DEBUG) {
-        args.forEach(arg => {
-          if (arg instanceof Error) Sentry.captureException(arg)
-          else Sentry.addBreadcrumb({data: arg, level: method})
-        })
-      }
-    }
+      console[method](...args);
+    };
   }
 }
 
-logger.init = (opts = {}) => {
-  // Always set up the logging methods
-  genMethods()
+logger.init = async (opts = {}) => {
+  const inBackground = await isBackground();
 
-  // Initialize Sentry only if not in DEBUG mode
-  if (!DEBUG) {
-    const {Vue} = opts
-    const integrations = Sentry.defaultIntegrations.slice() // Create a mutable copy
+  // In debug mode or background, the logger just prints to console.
+  if (DEBUG || inBackground) {
+    return;
+  }
+
+  // Dynamically import Sentry only for the frontend (non-background) context
+  try {
+    const Sentry = await import('@sentry/browser');
+    const Integrations = await import('@sentry/integrations');
+    const { SENTRY_DSN } = await import('./constants');
+
+    const { Vue } = opts;
+    const integrations = [...Sentry.defaultIntegrations];
     if (Vue) {
-      integrations.push(new Integrations.Vue({Vue}))
+      integrations.push(new Integrations.Vue({ Vue }));
     }
+
     Sentry.init({
-      environment: 'production', // Explicitly production if not DEBUG
+      environment: 'production',
       release: 'v' + manifest.version,
       dsn: SENTRY_DSN,
-      debug: false, // Debug should be false in production
+      debug: false,
       integrations,
-    })
+    });
 
-    Sentry.configureScope(async scope => {
-      scope.setTag('background', await isBackground())
-    })
+    Sentry.configureScope(scope => {
+      scope.setTag('background', false);
+    });
+
+    // Redefine logger methods to include Sentry breadcrumbs
+    for (const method in console) {
+      if (typeof console[method] === 'function') {
+        logger[method] = (...args) => {
+          console[method](...args);
+          args.forEach(arg => {
+            if (arg instanceof Error) {
+              Sentry.captureException(arg);
+            } else {
+              Sentry.addBreadcrumb({ data: arg, level: method });
+            }
+          });
+        };
+      }
+    }
+  } catch (e) {
+    console.error("Failed to initialize Sentry:", e);
   }
-}
+};
 
 export default logger

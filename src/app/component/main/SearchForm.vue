@@ -1,19 +1,18 @@
 <template>
-<v-text-field
-  solo-inverted
-  dark
-  flat
-  clearable
-  hide-details
-  label=" Search"
-  prepend-inner-icon="search"
-  @focus="onFocus"
-  @click:clear="onClear"
-  @keydown.enter="search"
-  v-model="value"
-  ref="searchForm"
->
-</v-text-field>
+  <v-text-field
+    ref="searchForm"
+    v-model="value"
+    solo-inverted
+    dark
+    flat
+    clearable
+    hide-details
+    label=" Search"
+    prepend-inner-icon="search"
+    @focus="onFocus"
+    @click:clear="onClear"
+    @keydown.enter="search"
+  />
 </template>
 <script>
 
@@ -23,11 +22,11 @@ export default {
       value: '',
     }
   },
-  created() {
-    this.stringifyQuery()
-  },
   watch: {
     '$route.query': 'stringifyQuery',
+  },
+  created() {
+    this.stringifyQuery()
   },
   methods: {
     stringifyQuery() {

@@ -1,27 +1,45 @@
 <template>
-<v-toolbar app clipped-left :color="nightmode ? null : 'primary'" :flat="flat" v-scroll="onScroll">
-  <v-toolbar-side-icon dark @click="switchDrawer"></v-toolbar-side-icon>
-  <v-toolbar-title class="white--text">IceTab</v-toolbar-title>
-  <v-spacer></v-spacer>
-  <search-form v-if="!opts.disableSearch"></search-form>
-  <v-spacer></v-spacer>
+  <v-toolbar
+    v-scroll="onScroll"
+    app
+    clipped-left
+    :color="nightmode ? null : 'primary'"
+    :flat="flat"
+  >
+    <v-toolbar-side-icon
+      dark
+      @click="switchDrawer"
+    />
+    <v-toolbar-title class="white--text">
+      IceTab
+    </v-toolbar-title>
+    <v-spacer />
+    <search-form v-if="!opts.disableSearch" />
+    <v-spacer />
 
-  <v-tooltip left>
-    <v-btn slot="activator" icon dark @click="switchNightmode">
-      <v-icon>{{ nightmode ? 'brightness_5' : 'brightness_4' }}</v-icon>
-    </v-btn>
-    <span>{{ __('ui_nightmode') }}</span>
-  </v-tooltip>
-</v-toolbar>
+    <v-tooltip left>
+      <v-btn
+        slot="activator"
+        icon
+        dark
+        @click="switchNightmode"
+      >
+        <v-icon>{{ nightmode ? 'brightness_5' : 'brightness_4' }}</v-icon>
+      </v-btn>
+      <span>{{ __('ui_nightmode') }}</span>
+    </v-tooltip>
+  </v-toolbar>
 </template>
 <script>
 import __ from '@/common/i18n'
 import searchForm from './SearchForm'
-import dynamicTime from '@/app/component/DynamicTime'
 import {mapState, mapActions, mapMutations} from 'vuex'
 // import {sendMessage} from '@/common/utils' // Commented out as it was likely used by sync-related methods
 
 export default {
+  components: {
+    searchForm,
+  },
   data() {
     return {
       flat: false,
@@ -30,10 +48,6 @@ export default {
       // online: navigator.onLine,
       // uploadSuccess: false,
     }
-  },
-  components: {
-    searchForm,
-    dynamicTime,
   },
   computed: {
     ...mapState(['opts', 'hasToken', 'nightmode', 'scrollY']),
