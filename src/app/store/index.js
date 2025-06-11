@@ -2,7 +2,8 @@ import _ from 'lodash'
 import Vue from 'vue'
 import Vuex from 'vuex'
 import storage from '@/common/storage'
-import options from '@/common/options'
+import options from '@/common/options' // eslint-disable-line no-unused-vars
+// import boss from '@/common/service/boss' // Comment out this import
 import listManager from '@/common/listManager'
 import {sleep} from '@/common/utils'
 
@@ -10,17 +11,12 @@ import lists from './lists'
 
 Vue.use(Vuex)
 
-// Determine the initial drawer state synchronously.
-// This will be 'false' if it's a popup, and 'true' otherwise.
-const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup'
-const initialDrawerState = !isPopup;
-
 export default new Vuex.Store({
   strict: DEBUG,
   state: {
     opts: options.getDefaultOptions(),
     hasToken: false,
-    drawer: initialDrawerState, // Use the synchronously-determined state
+    drawer: true,
     nightmode: false,
     snackbar: { status: false, msg: '' },
     scrollY: 0,
@@ -61,22 +57,20 @@ export default new Vuex.Store({
     ...lists.mutations,
   },
   actions: {
-    async initializeState({ commit, dispatch, state }) {
+    async initializeState({ commit, dispatch }) {
       await listManager.init()
       const loadedOptions = await storage.getOptions()
       if (loadedOptions) {
         commit('setOption', loadedOptions)
       }
-      
-      // If not in a popup, load the saved drawer state from storage.
-      if (!isPopup) {
+      // Check for the 'context=popup' query parameter
+      const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup'
+      if (isPopup) {
+        commit('setDrawer', false)
+      } else {
         const drawer = await storage.get('drawer')
-        const storedDrawerState = _.defaultTo(drawer, true);
-        if (state.drawer !== storedDrawerState) {
-            commit('setDrawer', storedDrawerState)
-        }
+        commit('setDrawer', _.defaultTo(drawer, true))
       }
-
       commit('setToken', false)
       await dispatch('preloadLists')
     },
@@ -86,14 +80,10 @@ export default new Vuex.Store({
       await storage.setOptions(newOpts)
     },
     async switchDrawer({ commit, state }, newState) {
+      // If newState is a boolean, use it. Otherwise, toggle the current state.
       const finalState = typeof newState === 'boolean' ? newState : !state.drawer;
       commit('setDrawer', finalState);
-
-      // Only save the drawer's state to storage if we are NOT in a popup.
-      // This prevents the popup's drawer state from affecting the main options page.
-      if (!isPopup) {
-        await storage.set({ drawer: finalState });
-      }
+      await storage.set({ drawer: finalState });
     },
     async switchNightmode({ dispatch, state }) {
       const newNightmodeState = !state.nightmode

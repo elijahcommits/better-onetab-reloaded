@@ -1,11 +1,12 @@
 <template>
   <v-navigation-drawer
-    v-model="drawer"
+    v-model="drawerState"
     class="app-drawer"
     fixed
     clipped
     app
     floating
+    temporary
   >
     <v-list>
       <v-list-tile
@@ -120,7 +121,7 @@ export default {
   },
   computed: {
     ...mapGetters(['taggedList']),
-    drawer: {
+    drawerState: {
       get() {
         return this.value;
       },

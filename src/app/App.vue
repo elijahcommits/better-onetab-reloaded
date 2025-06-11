@@ -21,14 +21,18 @@ export default {
   created() {
     this.$store.dispatch('initializeState')
 
-    // This logic adds the .icetab-popup class to the <html> element
-    if (window.location.pathname.endsWith('popup.html')) {
-      document.documentElement.classList.add('icetab-popup')
+    // This logic adds the .is-popup class to the body, which our new CSS will use.
+    if (new URLSearchParams(window.location.search).get('context') === 'popup') {
+      document.body.classList.add('is-popup')
     }
   },
 }
 </script>
 
 <style lang="scss">
-/* All previous CSS fixes should be removed from here. */
+/* This is the new CSS rule that fixes the drawer issue. */
+/* It forces the drawer to its closed position on startup in the popup. */
+.is-popup .v-navigation-drawer--open {
+  transform: translateX(-100%) !important;
+}
 </style>

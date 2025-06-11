@@ -3,8 +3,7 @@
     :dark="nightmode"
     :class="{'no-transition': opts.disableTransition}"
   >
-    <drawer :value="drawer" />
-    <toolbar />
+    <drawer v-model="drawerState" /> <toolbar />
     <v-content>
       <v-container>
         <keep-alive>
@@ -12,34 +11,17 @@
         </keep-alive>
       </v-container>
     </v-content>
-    <v-footer>
-      <v-spacer />
-      <span>
-        Made with <i
-          class="fa fa-heart throb"
-          style="color:#d43f57"
-        /> by <a
-          style="color:red; text-decoration: none;"
-          href="https://www.cnwangjie.com/"
-          target="_blank"
-        >WangJie</a>,
-        sporked by <a
-          style="color:red; text-decoration: none;"
-          href="https://www.elicrab.com/"
-          target="_blank"
-        >Elijah</a>
-      </span>
-      <v-spacer />
-    </v-footer>
+    <v-footer />
     <snackbar />
   </v-app>
 </template>
+
 <script>
 import drawer from '@/app/component/main/Drawer'
 import toolbar from '@/app/component/main/Toolbar'
 import snackbar from '@/app/component/main/Snackbar'
 
-import {mapState} from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -48,10 +30,30 @@ export default {
     snackbar,
   },
   computed: {
-    ...mapState(['drawer', 'nightmode', 'opts']),
+    ...mapState(['nightmode', 'opts']),
+    drawerState: {
+      get() {
+        return this.$store.state.drawer;
+      },
+      set(value) {
+        this.switchDrawer(value);
+      }
+    }
   },
+  created() {
+    // Force the drawer to be closed if this is a popup.
+    // This hook runs before the component is mounted to the DOM.
+    const isPopup = new URLSearchParams(window.location.search).get('context') === 'popup';
+    if (isPopup) {
+      this.switchDrawer(false);
+    }
+  },
+  methods: {
+    ...mapActions(['switchDrawer'])
+  }
 }
 </script>
+
 <style>
 .no-transition * {
   transition: none !important;

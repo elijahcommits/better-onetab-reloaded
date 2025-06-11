@@ -71,7 +71,7 @@
                 </v-layout>
               </v-card>
             </v-menu>
-            <strong class="grey--text date">{{ __('ui_created') }} <dynamic-time v-model="list.time" /></strong>
+            <strong class="grey--text date">{{ __('ui_created') }} <dynamic-time :value="list.time" /></strong>
             <v-chip
               v-for="tagName in list.tags"
               :key="tagName"
@@ -235,7 +235,7 @@
           >
             <draggable
               :value="list.tabs"
-              :options="draggableOptions"
+              v-bind="draggableOptions"
               @input="setTabs([list.index, $event])"
               @change="tabMoved([list.index])"
             >
