@@ -1,38 +1,61 @@
 <template>
-  <v-app :dark="nightmode">
+  <v-app
+    :dark="nightmode"
+    :class="{'no-transition': opts.disableTransition}"
+  >
+    <drawer v-model="drawerState" />
+    <toolbar />
     <v-content>
       <v-container fluid>
         <router-view />
       </v-container>
     </v-content>
+    <v-footer app />
+    <snackbar />
   </v-app>
 </template>
 
 <script>
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import '@/assets/css/fontawesome-all.min.css'
-import { mapState } from 'vuex'
+import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import '@/assets/css/fontawesome-all.min.css';
+import { mapState, mapActions } from 'vuex';
+import drawer from '@/app/component/main/Drawer.vue';
+import toolbar from '@/app/component/main/Toolbar.vue';
+import snackbar from '@/app/component/main/Snackbar.vue';
 
 export default {
   name: 'App',
+  components: {
+    drawer,
+    toolbar,
+    snackbar,
+  },
   computed: {
-    ...mapState(['nightmode'])
+    ...mapState(['nightmode', 'opts', 'drawer']),
+    drawerState: {
+      get() {
+        return this.drawer;
+      },
+      set(value) {
+        this.switchDrawer(value);
+      },
+    },
   },
   created() {
-    this.$store.dispatch('initializeState')
+    this.$store.dispatch('initializeState');
 
-    // This logic adds the .is-popup class to the body, which our new CSS will use.
-    if (new URLSearchParams(window.location.search).get('context') === 'popup') {
-      document.body.classList.add('is-popup')
+    if (window.location.pathname.endsWith('popup.html')) {
+      document.documentElement.classList.add('icetab-popup');
     }
   },
-}
+  methods: {
+    ...mapActions(['switchDrawer']),
+  },
+};
 </script>
 
-<style lang="scss">
-/* This is the new CSS rule that fixes the drawer issue. */
-/* It forces the drawer to its closed position on startup in the popup. */
-.is-popup .v-navigation-drawer--open {
-  transform: translateX(-100%) !important;
+<style>
+.no-transition * {
+  transition: none !important;
 }
 </style>

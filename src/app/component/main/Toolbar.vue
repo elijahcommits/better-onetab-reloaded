@@ -8,7 +8,7 @@
   >
     <v-toolbar-side-icon
       dark
-      @click="switchDrawer"
+      @click="toggleDrawer"
     />
     <v-toolbar-title class="white--text">
       IceTab
@@ -34,7 +34,6 @@
 import __ from '@/common/i18n'
 import searchForm from './SearchForm'
 import {mapState, mapActions, mapMutations} from 'vuex'
-// import {sendMessage} from '@/common/utils' // Commented out as it was likely used by sync-related methods
 
 export default {
   components: {
@@ -43,64 +42,28 @@ export default {
   data() {
     return {
       flat: false,
-      // sync-related data properties are commented out below:
-      // syncing: false,
-      // online: navigator.onLine,
-      // uploadSuccess: false,
     }
   },
   computed: {
     ...mapState(['opts', 'hasToken', 'nightmode', 'scrollY']),
-    // sync-related computed properties are commented out below:
-    // tooltip() {
-    //   return !this.online ? __('ui_offline')
-    //     : !this.hasToken ? __('ui_not_login')
-    //     : this.syncing ? __('ui_syncing')
-    //     : __('ui_refresh')
-    // },
-    // syncIcon() {
-    //   return !this.online ? 'cloud_off'
-    //     : !this.hasToken ? 'cloud_off'
-    //     : this.uploadSuccess ? 'cloud_done'
-    //     : 'cloud_upload'
-    // },
   },
   created() {
     this.init()
   },
   methods: {
     __,
-    ...mapMutations(['setScrollY']),
-    ...mapActions(['switchNightmode', 'switchDrawer']),
+    ...mapMutations(['setScrollY', 'setDrawer']),
+    ...mapActions(['switchNightmode']),
     init() {
       this.onScroll()
-      // sync-related event listeners are commented out below:
-      // window.addEventListener('online', () => { this.online = true })
-      // window.addEventListener('offline', () => { this.online = false })
-      // chrome.runtime.onMessage.addListener(msg => {
-      //   if (msg.refreshing) {
-      //     this.syncing = true
-      //   } else if (msg.refreshed) {
-      //     this.syncing = false
-      //     this.uploadSuccess = msg.refreshed.success
-      //     if (this.uploadSuccess) {
-      //       setTimeout(() => { this.uploadSuccess = false }, 3000)
-      //     }
-      //   }
-      // })
     },
     onScroll() {
       this.setScrollY(window.pageYOffset || document.documentElement.scrollTop)
       this.flat = this.scrollY === 0
     },
-    // sync-related method is commented out below:
-    // syncBtnClicked() {
-    //   if (this.uploadSuccess) return
-    //   if (!this.hasToken) {
-    //     return this.$router.push('/app/options/sync')
-    //   }
-    //   return sendMessage({refresh: true})
-    // },
+    toggleDrawer() {
+      this.$store.commit('setDrawer', !this.$store.state.drawer);
+    }
   }
 }
 </script>

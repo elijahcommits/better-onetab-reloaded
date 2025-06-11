@@ -2,10 +2,7 @@
   <v-navigation-drawer
     v-model="drawerState"
     class="app-drawer"
-    fixed
-    clipped
     app
-    floating
     temporary
   >
     <v-list>
